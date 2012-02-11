@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>scheme.js read eval print loop</title>
+        <script src="scheme.js"></script>
+    </head>
+    <body>
+        <input id="input" type="text"/>
+        <button id="eval">Evaluate</button>
+        <div id="output"/>
+        <script>
+            document.getElementById("eval").onclick = function() {
+                var input = document.getElementById("input"),
+                    output = document.getElementById("output");
+                output.innerHTML += scheme.eval(input.value) + "<br/>";
+                input.value = "";
+            };
+        </script>
+    </body>
+</html>
