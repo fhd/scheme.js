@@ -2,29 +2,36 @@
 <html>
     <head>
         <title>scheme.js read eval print loop</title>
+        <style>
+            input#expressionInput {
+                width: 300px;
+            }
+        </style>
         <script src="scheme.js"></script>
     </head>
     <body>
-        <input id="input" type="text"/>
+        <input id="expressionInput" type="text"/>
         <button id="eval">Evaluate</button>
         <div id="output"/>
         <script>
             var evalButton = document.getElementById("eval"),
                 env = {},
-                input = document.getElementById("input");
+                expressionInput = document.getElementById("expressionInput");
             evalButton.onclick = function() {
+                var expression = expressionInput.value;
                 document.getElementById("output").innerHTML +=
-                    scheme.eval(input.value, env) + "<br/>";
-                input.value = "";
-                input.focus();
+                    "> " + expression + "<br/>" +
+                    scheme.eval(expression, env) + "<br/>";
+                expressionInput.value = "";
+                expressionInput.focus();
             };
-            input.onkeypress = function(e) {
+            expressionInput.onkeypress = function(e) {
                 if (!e)
                     var e = window.event;
                 if (e.keyCode == 13)
                     evalButton.click();
             };
-            input.focus();
+            expressionInput.focus();
         </script>
     </body>
 </html>
