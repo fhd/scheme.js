@@ -9,12 +9,21 @@
         <button id="eval">Evaluate</button>
         <div id="output"/>
         <script>
-            document.getElementById("eval").onclick = function() {
-                var input = document.getElementById("input"),
-                    output = document.getElementById("output");
-                output.innerHTML += scheme.eval(input.value) + "<br/>";
+            var evalButton = document.getElementById("eval"),
+                input = document.getElementById("input");
+            evalButton.onclick = function() {
+                document.getElementById("output").innerHTML +=
+                    scheme.eval(input.value) + "<br/>";
                 input.value = "";
+                input.focus();
             };
+            input.onkeypress = function(e) {
+                if (!e)
+                    var e = window.event;
+                if (e.keyCode == 13)
+                    evalButton.click();
+            };
+            input.focus();
         </script>
     </body>
 </html>
