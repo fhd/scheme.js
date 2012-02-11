@@ -10,10 +10,11 @@
         <div id="output"/>
         <script>
             var evalButton = document.getElementById("eval"),
+                env = {},
                 input = document.getElementById("input");
             evalButton.onclick = function() {
                 document.getElementById("output").innerHTML +=
-                    scheme.eval(input.value) + "<br/>";
+                    scheme.eval(input.value, env) + "<br/>";
                 input.value = "";
                 input.focus();
             };
