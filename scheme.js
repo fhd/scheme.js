@@ -41,8 +41,12 @@ var scheme = {};
         if (!isArray(parseTree))
             return parseTree;
         var functionName = parseTree[0];
-        if (["+", "-", "*", "/"].indexOf(functionName) !== -1)
-            return window.eval(eval(parseTree[1]) + functionName +
+        if (functionName === "if")
+            return eval(eval(parseTree[1]) ? parseTree[2] : parseTree[3]);
+        else if (["+", "-", "*", "/", "=", ">", "<", ">=", "<="]
+                 .indexOf(functionName) !== -1)
+            return window.eval(eval(parseTree[1]) +
+                               (functionName === "=" ? "==" : functionName) +
                                eval(parseTree[2]));
         throw "Unknown function: " + functionName;
     }
