@@ -12,7 +12,7 @@ var scheme = {};
         return token;
     }
     
-    function read(tokens) {
+    function readTokens(tokens) {
         if (tokens.length === 0)
             throw "Unexpected EOF while reading";
         var token = tokens[0];
@@ -20,7 +20,7 @@ var scheme = {};
         if (token === "(") {
             var list = [];
             while (tokens[0] != ")")
-                list.push(read(tokens));
+                list.push(readTokens(tokens));
             tokens.shift();
             return list;
         } else if (token === ")")
@@ -29,30 +29,29 @@ var scheme = {};
             return readAtom(token);
     }
 
-    function parse(expression) {
-        return read(tokenise(expression));
+    function read(expression) {
+        return readTokens(tokenise(expression));
     }
 
     function isArray(x) {
         return Object.prototype.toString.call(x) === '[object Array]';
     }
 
-    function eval(parseTree) {
-        if (!isArray(parseTree))
-            return parseTree;
-        var functionName = parseTree[0];
+    function eval(x) {
+        if (!isArray(x))
+            return x;
+        var functionName = x[0];
         if (functionName === "if")
-            return eval(eval(parseTree[1]) ? parseTree[2] : parseTree[3]);
+            return eval(eval(x[1]) ? x[2] : x[3]);
         else if (["+", "-", "*", "/", "=", ">", "<", ">=", "<="]
                  .indexOf(functionName) !== -1)
-            return window.eval(eval(parseTree[1]) +
+            return window.eval(eval(x[1]) +
                                (functionName === "=" ? "==" : functionName) +
-                               eval(parseTree[2]));
+                               eval(x[2]));
         throw "Unknown function: " + functionName;
     }
 
     scheme.eval = function(string) {
-        return eval(parse(string));
+        return eval(read(string));
     };
 })(scheme);
-
