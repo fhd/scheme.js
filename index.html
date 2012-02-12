@@ -2,7 +2,30 @@
 <html>
     <head>
         <title>scheme.js</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <style>
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                overflow: hidden;
+            }
+
+            #repl {
+                width: 100%;
+                border: none;
+            }
+        </style>
+        <script src="browser-repl/js/libs/jquery-1.7.1.min.js"></script>
+        <script>
+            $(function() {
+                $(window).resize(function() {
+                    var text = $("#text");
+                    $("#repl").height($("body").height() - text.height() -
+                                      text.offset().top - 25);
+                }).resize();
+            });
+        </script>
     </head>
     <body>
         <a href="http://github.com/fhd/scheme.js">
@@ -10,14 +33,11 @@
                  src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
                  alt="Fork me on GitHub">
         </a>
-        <h1>scheme.js</h1>
-        <p>scheme.js is a Scheme implementation written in JavaScript aiming at R5RS compliance.</p>
-        <div id="repl"/>
-        <script>
-            $.get("https://raw.github.com/fhd/scheme.js/master/browser-repl/index.html",
-                  function(data) {
-                      $("#repl").html(data);
-                  });
-        </script>
+        <div id="text">
+            <h1>scheme.js</h1>
+            <p>scheme.js is a Scheme implementation written in JavaScript aiming at R5RS compliance.</p>
+            <p>You can try it right here in your browser.</p>
+        </div>
+        <iframe id="repl" src="browser-repl/index.html"/>
     </body>
 </html>
