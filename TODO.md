@@ -2,7 +2,6 @@ The goal is R5RS compliance. This is a list of the (IMO) most
 important issues.
 
 * Remove comments
-* Include a REPL in the site
 * Support file evaluation in the REPL
 * Support short procedure definition syntax (R5RS 5.2)
 * Support quoting (quote and ')
