@@ -7,7 +7,11 @@ var scheme = require("./scheme.js"),
 rl.setPrompt("=> ");
 rl.on("line", function(cmd) {
     if (cmd.length)
-        sys.puts(scheme.eval(cmd, env));
+        try {
+            sys.puts(scheme.eval(cmd, env));
+        } catch (e) {
+            sys.puts("Error: " + e);
+        }
     rl.prompt();
 });
 rl.on("close", function() {
