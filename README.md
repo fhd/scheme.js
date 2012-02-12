@@ -8,7 +8,17 @@ This is still work in progress, the goal is (near) R5RS compliance.
 Running the REPL
 ----------------
 
-Just open repl.html in a browser. A command-line REPL is planned.
+There are two rays to run a REPL:
+
+### From the browser
+
+Just open _repl.html_ in a browser.
+
+### From the command-line
+
+[Node.js](http://nodejs.org) is required.
+
+    node repl.js
 
 Running the tests
 -----------------
