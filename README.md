@@ -12,7 +12,7 @@ There are two rays to run a REPL:
 
 ### From the browser
 
-Just open _repl.html_ in a browser.
+Just open _browser-repl/index.html_ in a browser.
 
 ### From the command-line
 
