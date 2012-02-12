@@ -15,7 +15,7 @@
         <div id="output"/>
         <script>
             var evalButton = document.getElementById("eval"),
-                env = {},
+                env = new scheme.Environment,
                 expressionInput = document.getElementById("expressionInput");
             evalButton.onclick = function() {
                 var expression = expressionInput.value;
