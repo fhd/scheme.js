@@ -38,7 +38,7 @@ var scheme = {};
 
     forEach(["+", "-", "*", "/", ">", "<", ">=", "<="], function(operator) {
         readMacros[operator] = function(env, operator, first, second) {
-            return window.eval(eval(first, env) + operator + eval(second, env));
+            return this.eval(eval(first, env) + operator + eval(second, env));
         };
     });
 
@@ -125,4 +125,4 @@ var scheme = {};
     scheme.eval = function(string, env) {
         return eval(read(string), env);
     };
-})(scheme);
+})(typeof exports !== "undefined" && exports || scheme);
