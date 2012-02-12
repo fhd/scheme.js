@@ -24,9 +24,6 @@ var scheme = {};
                     argMap[lambdaArgs[i]] = arguments[i];
                 return eval(body, new scheme.Environment(argMap, env));
             };
-        },
-        "=": function(env, _, first, second) {
-            return eval(first, env) == eval(second, env);
         }
     };
 
@@ -36,15 +33,21 @@ var scheme = {};
             f(array[i]);
     }
 
-    forEach(["+", "-", "*", "/", ">", "<", ">=", "<="], function(operator) {
-        readMacros[operator] = function(env, operator, first, second) {
-            return this.eval(eval(first, env) + operator + eval(second, env));
-        };
-    });
-
     scheme.Environment = function(entries, outer) {
         this.entries = entries || {};
         this.outer = outer || null;
+        if (!(entries || outer)) {
+            this.entries["="] = function(first, second) {
+                return first == second;
+            };
+            var that = this;
+            forEach(["+", "-", "*", "/", ">", "<", ">=", "<="],
+                    function(operator) {
+                        that.entries[operator] = function(first, second) {
+                            return this.eval(first + operator + second);
+                        };
+                    });
+        }
     }
 
     scheme.Environment.prototype = {
