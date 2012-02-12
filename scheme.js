@@ -9,7 +9,7 @@ var scheme = {};
             env.set(name, eval(value, env));
         },
         "set!": function(env, _, name, value) {
-            if (!(name in env))
+            if (!env.get(name))
                 throw "Unbound variable: " + name;
             env.set(name, value);
         },
