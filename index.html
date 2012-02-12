@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>scheme.js</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <h1>scheme.js</h1>
+        <p>scheme.js is a Scheme implementation written in JavaScript aiming at R5RS compliance.</p>
+        <div id="repl"/>
+        <script>
+            $.get("https://raw.github.com/fhd/scheme.js/master/browser-repl/index.html",
+                  function(data) {
+                      $("#repl").html(data);
+                  });
+        </script>
+    </body>
+</html>
