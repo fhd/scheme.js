@@ -46,5 +46,9 @@ module.exports = {
     testLambdas: function(test) {
         test.equal(this.eval("((lambda (x) (* x x)) 2)"), 4);
         test.done();
+    },
+    testMultipleExpressions: function(test) {
+        test.equal(this.eval("1 2"), [1, 2]);
+        test.done();
     }
 };
