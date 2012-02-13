@@ -113,7 +113,7 @@ var scheme = {};
             objName = x[1],
             obj = (objName === "js") ? this : this.eval(objName),
             args = x.slice(2);
-        return obj[f].apply(null, args);
+        return obj[f].apply(obj, args);
     }
 
     function callProcedure(x, env) {
@@ -149,4 +149,40 @@ var scheme = {};
         var result = evalAll(read(string), env);
         return (result.length > 1) ? result : result[0];
     };
+
+    function httpGet(uri, callback) {
+        var httpRequest;
+        if (window.XMLHttpRequest)
+            httpRequest = new XMLHttpRequest;
+        else if (window.ActiveXObject)
+            httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState != 4)
+                return;
+            var status = httpRequest.status;
+            if (status === 0 || status === 200)
+                callback(httpRequest.responseText);
+            else
+                console.error("Unable to load scheme script from: " + uri +
+                              ", status: " + statusText);
+        };
+        httpRequest.open("GET", uri);
+        httpRequest.send();
+    }
+
+    if (typeof window !== "undefined") {
+        window.onload = function() {
+            var scripts = document.getElementsByTagName("script");
+            forEach(scripts, function(script) {
+                if (script.type !== "text/scheme")
+                    return;
+                if (script.src.length)
+                    httpGet(script.src, function(data) {
+                        scheme.eval(data);
+                    });
+                else
+                    scheme.eval(script.innerHTML);
+            });
+        };
+    }
 })(typeof exports !== "undefined" && exports || scheme);

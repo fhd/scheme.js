@@ -1,6 +1,8 @@
 The goal is R5RS compliance. This is a list of the (IMO) most
 important issues.
 
+* Support JavaScript properties (get, set, save to environment)
+* Use scheme.js for browser-repl and GitHub page
 * Remove comments
 * Support short procedure definition syntax (R5RS 5.2)
 * Support quoting (quote and ')
@@ -19,4 +21,4 @@ important issues.
 * Implement tail recursion optimization (R5RS 3.5)
 * Validate identifiers (R5RS 2.1)
 * Support remaining notation (R5RS 2.3)
-
+* Support SRFI-1

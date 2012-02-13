@@ -26,6 +26,41 @@ To process a file:
 
     node repl.js file.scm
 
+Using scheme.js in a website
+----------------------------
+
+If you include scheme.js, you can include scheme code via script tags,
+just like JavaScript code. Like this:
+
+    <script src="scheme.js"></script>
+    <script type="text/scheme">
+        (.alert js 42)
+    </script>
+    <script type="text/scheme" src="hello.scm"></script>
+
+Using scheme.js in Node.js
+--------------------------
+
+You can either execute a scheme file via the REPL:
+
+    node repl.js hello.scm
+
+Or evaluate scheme from a JavaScript file:
+
+    var scheme = require("./scheme.js");
+    scheme.eval("(.log console 42)", new scheme.Environment);
+
+Calling JavaScript functions
+----------------------------
+
+You can call a JavaScript function, e.g. console.log, like this:
+
+    (.log console 42)
+
+In JavaScript, this would look like this:
+
+    console.log(42);
+
 Running the tests
 -----------------
 
