@@ -18,7 +18,13 @@ Just open _browser-repl/index.html_ in a browser.
 
 [Node.js](http://nodejs.org) is required.
 
+To start an interactive session:
+
     node repl.js
+
+To process a file:
+
+    node repl.js file.scm
 
 Running the tests
 -----------------
