@@ -3,15 +3,14 @@ var args = process.argv.slice(2),
     env = new scheme.Environment;
 
 function print(result) {
-    var i;
-
     if (!Array.isArray(result)) {
         console.log(result);
         return;
     }
 
-    for (i = 0; i < result.length; i++)
-        console.log(result[i]);
+    result.forEach(function(item) {
+        console.log(item);
+    });
 }
 
 function rep(expression) {
