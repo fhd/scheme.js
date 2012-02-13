@@ -108,6 +108,14 @@ var scheme = {};
         return newArray;
     }
 
+    function callNativeFunction(x) {
+        var f = x[0].substring(1),
+            objName = x[1],
+            obj = (objName === "js") ? this : this.eval(objName),
+            args = x.slice(2);
+        return obj[f].apply(null, args);
+    }
+
     function callProcedure(x, env) {
         var expressions = map(x, function(element) {
                 return eval(element, env);
@@ -123,6 +131,8 @@ var scheme = {};
             return env.get(x);
         if (!isArray(x))
             return x;
+        if (x[0][0] === ".")
+            return callNativeFunction(x);
         readMacro = readMacros[x[0]];
         if (readMacro)
             return readMacro.apply(null, [env].concat(x));

@@ -52,5 +52,16 @@ module.exports = {
         test.deepEqual(this.eval("(+ 1 2) (- 5 1)"), [3, 4]);
         test.deepEqual(this.eval("(define x 5) (* x 2)"), [undefined, 10]);
         test.done();
+    },
+    testExecuteJavaScriptFunction: function(test) {
+        var stubWasCalled = false;
+        stub = function() {
+            stubWasCalled = true;
+        };
+        this.eval("(.stub js)");
+        test.ok(stubWasCalled,
+                "The JavaScript function stub() should have been called");
+        delete stub;
+        test.done();
     }
 };
