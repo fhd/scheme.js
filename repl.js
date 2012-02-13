@@ -2,6 +2,26 @@ var args = process.argv.slice(2),
     scheme = require("./scheme.js"),
     env = new scheme.Environment;
 
+function print(result) {
+    var i;
+
+    if (!Array.isArray(result)) {
+        console.log(result);
+        return;
+    }
+
+    for (i = 0; i < result.length; i++)
+        console.log(result[i]);
+}
+
+function rep(expression) {
+    try {
+        print(scheme.eval(expression, env));
+    } catch (e) {
+        console.error("Error: " + e);
+    }
+}
+
 function batch(file) {
     var fs = require("fs");
     fs.readFile(file, "utf-8", function(error, data) {
@@ -9,7 +29,7 @@ function batch(file) {
             console.error(error);
             process.exit(1);
         } else {
-            console.log(scheme.eval(data, env));
+            rep(data);
             process.exit(0);
         }
     });
@@ -22,11 +42,7 @@ function interactive() {
     rl.setPrompt("=> ");
     rl.on("line", function(cmd) {
         if (cmd.length)
-            try {
-                console.log(scheme.eval(cmd, env));
-            } catch (e) {
-                console.log("Error: " + e);
-            }
+            rep(cmd);
         rl.prompt();
     });
     rl.on("close", function() {
