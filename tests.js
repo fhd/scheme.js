@@ -48,7 +48,9 @@ module.exports = {
         test.done();
     },
     testMultipleExpressions: function(test) {
-        test.equal(this.eval("1 2"), [1, 2]);
+        test.deepEqual(this.eval("1 2"), [1, 2]);
+        test.deepEqual(this.eval("(+ 1 2) (- 5 1)"), [3, 4]);
+        test.deepEqual(this.eval("(define x 5) (* x 2)"), [undefined, 10]);
         test.done();
     }
 };
