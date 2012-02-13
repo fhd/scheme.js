@@ -90,7 +90,11 @@ var scheme = {};
     }
 
     function read(expression) {
-        return readTokens(tokenise(expression));
+        var tokens = tokenise(expression),
+            representation = [];
+        while (tokens.length)
+            representation.push(readTokens(tokens));
+        return representation;
     }
 
     function isArray(x) {
@@ -98,7 +102,7 @@ var scheme = {};
     }
 
     function map(array, f) {
-        var i, newArray = [];
+        var newArray = [], i;
         for (i = 0; i < array.length; i++)
             newArray.push(f(array[i]));
         return newArray;
@@ -125,7 +129,14 @@ var scheme = {};
         return callProcedure(x, env);
     }
 
+    function evalAll(xs, env) {
+        return map(xs, function(x) {
+            return eval(x, env);
+        });
+    }
+
     scheme.eval = function(string, env) {
-        return eval(read(string), env);
+        var result = evalAll(read(string), env);
+        return (result.length > 1) ? result : result[0];
     };
 })(typeof exports !== "undefined" && exports || scheme);
