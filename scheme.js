@@ -124,6 +124,8 @@ var scheme = {};
                 return eval(element, env);
             }),
             firstExpression = expressions[0];
+        if (!firstExpression)
+            throw x[0] + " is not a procedure";
         expressions.shift();
         return firstExpression.apply(null, expressions);
     }
