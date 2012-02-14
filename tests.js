@@ -40,9 +40,9 @@ module.exports = {
     },
     testVariables: function(test) {
         test.equal(this.evalFirst("x"), undefined);
-        this.evalFirst("(define x 5)");
+        this.eval("(define x 5)");
         test.equal(this.evalFirst("x"), 5);
-        this.evalFirst("(set! x 6)");
+        this.eval("(set! x 6)");
         test.equal(this.evalFirst("x"), 6);
         test.done();
     },
@@ -61,10 +61,13 @@ module.exports = {
         stub = function() {
             stubWasCalled = true;
         };
-        this.evalFirst("(.stub js)");
+        this.eval("(.stub js)");
         test.ok(stubWasCalled,
                 "The JavaScript function stub() should have been called");
         delete stub;
+        test.equal(this.evalFirst("(.substring (quote hello) 0 4)"), "hell");
+        this.eval("(define s (quote hello))");
+        test.equal(this.evalFirst("(.substring s 0 4)"), "hell");
         test.done();
     },
     testQuoting: function(test) {

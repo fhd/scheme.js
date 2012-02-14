@@ -118,18 +118,19 @@ var scheme = {};
         return newArray;
     }
 
-    function callNativeFunction(x) {
+    function callNativeFunction(x, env) {
         var f = x[0].substring(1),
             objName = x[1],
-            obj = (objName === "js") ? this : this.eval(objName),
-            args = x.slice(2);
+            obj = (objName === "js") ? this :
+                eval(objName, env) || this.eval(objName),
+            args = evalAll(x.slice(2), env);
+        if (!obj || !obj[f])
+            throw objName + "." + f + " is not a function";
         return obj[f].apply(obj, args);
     }
 
     function callProcedure(x, env) {
-        var expressions = map(x, function(element) {
-                return eval(element, env);
-            }),
+        var expressions = evalAll(x, env),
             firstExpression = expressions[0];
         if (!firstExpression)
             throw x[0] + " is not a procedure";
@@ -145,7 +146,7 @@ var scheme = {};
             return x;
         first = x[0];
         if (first[0] === ".")
-            return callNativeFunction(x);
+            return callNativeFunction(x, env);
         readMacro = readMacros[first];
         if (readMacro)
             return readMacro.apply(null, [env].concat(x));
