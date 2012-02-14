@@ -3,11 +3,6 @@ var args = process.argv.slice(2),
     env = new scheme.Environment;
 
 function print(result) {
-    if (!Array.isArray(result)) {
-        console.log(result);
-        return;
-    }
-
     result.forEach(function(item) {
         console.log(item);
     });

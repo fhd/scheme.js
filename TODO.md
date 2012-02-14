@@ -5,7 +5,7 @@ important issues.
 * Use scheme.js for browser-repl and GitHub page
 * Remove comments
 * Support short procedure definition syntax (R5RS 5.2)
-* Support quoting (quote and ')
+* Support quoting via '
 * Support let and let*
 * Support begin
 * Support and
