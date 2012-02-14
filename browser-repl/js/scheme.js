@@ -26,6 +26,8 @@ var scheme = {};
             };
         },
         "quote": function(env, _, value) {
+            if (value instanceof Symbol)
+                return value.toString();
             return value;
         },
         "begin": function(env) {
@@ -34,6 +36,15 @@ var scheme = {};
                 result = eval(arg, env);
             });
             return result;
+        }
+    },
+    Symbol = function(s) {
+        this.s = s;
+    };
+
+    Symbol.prototype = {
+        toString: function() {
+            return this.s;
         }
     };
 
@@ -48,7 +59,7 @@ var scheme = {};
         this.outer = outer || null;
         if (!(entries || outer)) {
             this.entries["="] = function(first, second) {
-                return first == second;
+                return first === second;
             };
             var that = this;
             forEach(["+", "-", "*", "/", ">", "<", ">=", "<="],
@@ -71,25 +82,34 @@ var scheme = {};
     };
 
     function tokenise(expression) {
-        return expression.match(/([()]|[^\s()]+)/g);
+        return expression.match(/(".*"|[()]|[^\s()]+)/g);
     }
 
     function readAtom(token) {
-        var number = parseFloat(token);
+        var first = token[0],
+            lastIndex = token.length - 1,
+            last = token[lastIndex],
+            number;
+        if (first === '"' || last === '"') {
+            if (first !== last)
+                throw "Unexpected EOF while reading string";
+            return token.substring(1, lastIndex);
+        }
+        number = parseFloat(token);
         if (!isNaN(number))
             return number;
-        return token;
+        return new Symbol(token);
     }
     
     function readTokens(tokens) {
-        var token, list;
+        var token, list, i;
         if (tokens.length === 0)
             throw "Unexpected EOF while reading";
         token = tokens[0];
         tokens.shift();
         if (token === "(") {
             list = [];
-            while (tokens[0] != ")")
+            while (tokens[0] !== ")")
                 list.push(readTokens(tokens));
             tokens.shift();
             return list;
@@ -119,10 +139,11 @@ var scheme = {};
     }
 
     function callNativeFunction(x, env) {
-        var f = x[0].substring(1),
-            objName = x[1],
+        var f = x[0].toString().substring(1),
+            objExpr = x[1],
+            objName = objExpr.toString(),
             obj = (objName === "js") ? this :
-                eval(objName, env) || this.eval(objName),
+                eval(objExpr, env) || this.eval(objName),
             args = evalAll(x.slice(2), env);
         if (!obj || !obj[f])
             throw objName + "." + f + " is not a function";
@@ -140,12 +161,12 @@ var scheme = {};
 
     function eval(x, env) {
         var first, firstChar, readMacro, expressions, firstExpression;
-        if (typeof x === "string")
-            return env.get(x);
+        if (x instanceof Symbol)
+            return env.get(x.toString());
         if (!isArray(x))
             return x;
         first = x[0];
-        if (first[0] === ".")
+        if (first instanceof Symbol && first.toString()[0] === ".")
             return callNativeFunction(x, env);
         readMacro = readMacros[first];
         if (readMacro)
@@ -170,14 +191,14 @@ var scheme = {};
         else if (window.ActiveXObject)
             httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
         httpRequest.onreadystatechange = function() {
-            if (httpRequest.readyState != 4)
+            if (httpRequest.readyState !== 4)
                 return;
             var status = httpRequest.status;
             if (status === 0 || status === 200)
                 callback(httpRequest.responseText);
             else
-                console.error("Unable to load scheme script from: " + uri +
-                              ", status: " + statusText);
+                throw "Unable to load scheme script from: " + uri +
+                    ", status: " + statusText;
         };
         httpRequest.open("GET", uri);
         httpRequest.send();
