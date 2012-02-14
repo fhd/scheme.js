@@ -1,7 +1,7 @@
 var scheme = {};
 
 (function(scheme) {
-    var readMacros = readMacros = {
+    var readMacros = {
         "if": function(env, _, test, consequence, alternative) {
             return eval(eval(test, env) ? consequence : alternative, env);
         },
@@ -27,6 +27,13 @@ var scheme = {};
         },
         "quote": function(env, _, value) {
             return value;
+        },
+        "begin": function(env) {
+            var result;
+            forEach(Array.prototype.slice.call(arguments, 1), function(arg) {
+                result = eval(arg, env);
+            });
+            return result;
         }
     };
 
@@ -124,6 +131,8 @@ var scheme = {};
                 return eval(element, env);
             }),
             firstExpression = expressions[0];
+        if (!firstExpression)
+            throw x[0] + " is not a procedure";
         expressions.shift();
         return firstExpression.apply(null, expressions);
     }
