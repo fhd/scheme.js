@@ -2,18 +2,19 @@ The goal is R5RS compliance. This is a list of the (IMO) most
 important issues.
 
 * Support JavaScript properties (get, set, save to environment)
-* Use scheme.js for browser-repl and GitHub page
 * Remove comments
-* Support quoting via '
-* Support let and let*
 * Support boolean literals
-* Support character literals
-* Support vector literals
+* Support let and let*
+* Support quoting via '
+* Use scheme.js for browser-repl and GitHub page
 * Support macros
+* Implement tail recursion optimization (R5RS 3.5)
 * Support do
 * Support cond
-* Implement standard procedures (R5RS 6)
-* Implement tail recursion optimization (R5RS 3.5)
+* Support character literals
+* Support vector literals
 * Validate identifiers (R5RS 2.1)
+* Support compilation to JS
+* Implement standard procedures (R5RS 6)
 * Support remaining notation (R5RS 2.3)
-* Support SRFI-1
+* Support SRFIs
