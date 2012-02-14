@@ -7,8 +7,6 @@ important issues.
 * Support short procedure definition syntax (R5RS 5.2)
 * Support quoting via '
 * Support let and let*
-* Support and
-* Support or
 * Support boolean literals
 * Support character literals
 * Support vector literals

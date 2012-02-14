@@ -29,6 +29,10 @@ module.exports = {
         test.ok(!this.evalFirst("(>= 1 2)"));
         test.ok(this.evalFirst("(<= 1 2)"));
         test.ok(!this.evalFirst("(<= 2 1)"));
+        test.ok(this.evalFirst("(and 1 1)"));
+        test.ok(!this.evalFirst("(and 1 0)"));
+        test.ok(this.evalFirst("(or 1 0)"));
+        test.ok(!this.evalFirst("(or 0 0)"));
         test.done();
     },
     testConditions: function(test) {

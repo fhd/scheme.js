@@ -36,6 +36,12 @@ var scheme = {};
                 result = eval(arg, env);
             });
             return result;
+        },
+        "and": function(env, _, first, second) {
+            return eval(first, env) && eval(second, env);
+        },
+        "or": function(env, _, first, second) {
+            return eval(first, env) || eval(second, env);
         }
     },
     Symbol = function(s) {
