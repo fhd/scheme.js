@@ -5,8 +5,17 @@ var scheme = {};
         "if": function(env, _, test, consequence, alternative) {
             return eval(eval(test, env) ? consequence : alternative, env);
         },
-        "define": function(env, _, name, value) {
-            env.set(name, eval(value, env));
+        "define": function(env, _, first, second) {
+            var name, args, body;
+            if (!isArray(first)) {
+                env.set(first, eval(second, env));
+                return;
+            }
+            name = first[0];
+            args = first.slice(1);
+            body = [new Symbol("begin")]
+                .concat(Array.prototype.slice.call(arguments, 3));
+            env.set(name, readMacros["lambda"](env, _, args, body));
         },
         "set!": function(env, _, name, value) {
             if (!env.get(name))

@@ -86,5 +86,10 @@ module.exports = {
     testBegin: function(test) {
         test.equal(this.evalFirst("(begin 1 2 3)"), 3);
         test.done();
+    },
+    testProcedures: function(test) {
+        this.eval("(define (pow x) (* x x))");
+        test.equal(this.evalFirst("(pow 10)"), 100);
+        test.done();
     }
 };
