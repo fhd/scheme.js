@@ -56,6 +56,15 @@ module.exports = {
         test.deepEqual(this.eval("(define x 5) (* x 2)"), [undefined, 10]);
         test.done();
     },
+    testQuoting: function(test) {
+        test.equal(this.evalFirst("(quote hello)"), "hello");
+        test.deepEqual(this.evalFirst("(quote (1 2 3))"), [1, 2, 3]);
+        test.done();
+    },
+    testStrings: function(test) {
+        test.equal(this.evalFirst('"hello"'), "hello");
+        test.done();
+    },
     testExecuteJavaScriptFunction: function(test) {
         var stubWasCalled = false;
         stub = function() {
@@ -66,13 +75,8 @@ module.exports = {
                 "The JavaScript function stub() should have been called");
         delete stub;
         test.equal(this.evalFirst("(.substring (quote hello) 0 4)"), "hell");
-        this.eval("(define s (quote hello))");
+        this.eval('(define s "hello")');
         test.equal(this.evalFirst("(.substring s 0 4)"), "hell");
-        test.done();
-    },
-    testQuoting: function(test) {
-        test.equal(this.evalFirst("(quote hello)"), "hello");
-        test.deepEqual(this.evalFirst("(quote (1 2 3))"), [1, 2, 3]);
         test.done();
     },
     testBegin: function(test) {

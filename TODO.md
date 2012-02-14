@@ -9,7 +9,6 @@ important issues.
 * Support let and let*
 * Support and
 * Support or
-* Support string literals
 * Support boolean literals
 * Support character literals
 * Support vector literals

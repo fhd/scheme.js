@@ -34,9 +34,11 @@ just like JavaScript code. Like this:
 
     <script src="scheme.js"></script>
     <script type="text/scheme">
-        (.alert js 42)
+        (.alert js "Hello, World!")
     </script>
     <script type="text/scheme" src="hello.scm"></script>
+
+_js_ refers to the global object, _window_ in the browser.
 
 Using scheme.js in Node.js
 --------------------------
@@ -48,18 +50,18 @@ You can either execute a scheme file via the REPL:
 Or evaluate scheme from a JavaScript file:
 
     var scheme = require("./scheme.js");
-    scheme.eval("(.log console 42)", new scheme.Environment);
+    scheme.eval('(.log console "Hello, World!")', new scheme.Environment);
 
 Calling JavaScript functions
 ----------------------------
 
 You can call a JavaScript function, e.g. console.log, like this:
 
-    (.log console 42)
+    (.log console "Hello, World!")
 
 In JavaScript, this would look like this:
 
-    console.log(42);
+    console.log("Hello, World!");
 
 Running the tests
 -----------------
