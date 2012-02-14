@@ -71,5 +71,9 @@ module.exports = {
         test.equal(this.evalFirst("(quote hello)"), "hello");
         test.deepEqual(this.evalFirst("(quote (1 2 3))"), [1, 2, 3]);
         test.done();
+    },
+    testBegin: function(test) {
+        test.equal(this.evalFirst("(begin 1 2 3)"), 3);
+        test.done();
     }
 };
