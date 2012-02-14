@@ -1,8 +1,5 @@
 function format(result) {
-    var formatted;
-    if (!$.isArray(result))
-        return result + "\n";
-    formatted = "";
+    var formatted = "";
     $.each(result, function(index, value) {
         formatted += value + "\n";
     });

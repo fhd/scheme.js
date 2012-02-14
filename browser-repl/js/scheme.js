@@ -24,6 +24,9 @@ var scheme = {};
                     argMap[lambdaArgs[i]] = arguments[i];
                 return eval(body, new scheme.Environment(argMap, env));
             };
+        },
+        "quote": function(env, _, value) {
+            return value;
         }
     };
 
@@ -126,14 +129,15 @@ var scheme = {};
     }
 
     function eval(x, env) {
-        var readMacro, expressions, firstExpression;
+        var first, firstChar, readMacro, expressions, firstExpression;
         if (typeof x === "string")
             return env.get(x);
         if (!isArray(x))
             return x;
-        if (x[0][0] === ".")
+        first = x[0];
+        if (first[0] === ".")
             return callNativeFunction(x);
-        readMacro = readMacros[x[0]];
+        readMacro = readMacros[first];
         if (readMacro)
             return readMacro.apply(null, [env].concat(x));
         return callProcedure(x, env);
@@ -146,8 +150,7 @@ var scheme = {};
     }
 
     scheme.eval = function(string, env) {
-        var result = evalAll(read(string), env);
-        return (result.length > 1) ? result : result[0];
+        return evalAll(read(string), env);
     };
 
     function httpGet(uri, callback) {
@@ -170,7 +173,7 @@ var scheme = {};
         httpRequest.send();
     }
 
-    if (window !== "undefined") {
+    if (typeof window !== "undefined") {
         window.onload = function() {
             var scripts = document.getElementsByTagName("script");
             forEach(scripts, function(script) {
