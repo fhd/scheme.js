@@ -17,10 +17,17 @@ var scheme = {};
                 .concat(Array.prototype.slice.call(arguments, 3));
             env.set(name, readMacros["lambda"](env, _, args, body));
         },
-        "set!": function(env, _, name, value) {
-            if (!env.get(name))
-                throw "Unbound variable: " + name;
-            env.set(name, value);
+        "set!": function(env, _, variable, value) {
+            var name;
+            if (variable instanceof Symbol) {
+                name = variable.toString();
+                if (!env.get(name))
+                    throw "Unbound variable: " + name;
+                env.set(name, value);
+            } else if (variable instanceof JsProperty)
+                variable.set(value);
+            else
+                readMacros["set!"](env, _, eval(variable, env), value);
         },
         "lambda": function(env, _, lambdaArgs, body) {
             return function() {
@@ -55,11 +62,27 @@ var scheme = {};
     },
     Symbol = function(s) {
         this.s = s;
+    },
+    JsProperty = function(object, property) {
+        this.object = object;
+        this.property = property;
     };
 
     Symbol.prototype = {
         toString: function() {
             return this.s;
+        }
+    };
+
+    JsProperty.prototype = {
+        get: function() {
+            return this.object[this.property];
+        },
+        set: function(value) {
+            this.object[this.property] = value;
+        },
+        toString: function() {
+            return this.get().toString();
         }
     };
 
@@ -153,16 +176,18 @@ var scheme = {};
         return newArray;
     }
 
-    function callNativeFunction(x, env) {
-        var f = x[0].toString().substring(1),
+    function getJsProperty(x, env) {
+        var name = x[0].toString().substring(1),
             objExpr = x[1],
-            objName = objExpr.toString(),
+            objName, obj, args;
+        if (objExpr instanceof Symbol) {
+            objName = objExpr.toString();
             obj = (objName === "js") ? this :
-                eval(objExpr, env) || this.eval(objName),
-            args = evalAll(x.slice(2), env);
-        if (!obj || !obj[f])
-            throw objName + "." + f + " is not a function";
-        return obj[f].apply(obj, args);
+                eval(objExpr, env) || this.eval(objName);
+        } else
+            obj = objExpr;
+        args = evalAll(x.slice(2), env);
+        return new JsProperty(obj, name);
     }
 
     function callProcedure(x, env) {
@@ -171,6 +196,9 @@ var scheme = {};
         if (!firstExpression)
             throw x[0] + " is not a procedure";
         expressions.shift();
+        if (firstExpression instanceof JsProperty)
+            return firstExpression.get().apply(firstExpression.object,
+                                               expressions);
         return firstExpression.apply(null, expressions);
     }
 
@@ -182,7 +210,7 @@ var scheme = {};
             return x;
         first = x[0];
         if (first instanceof Symbol && first.toString()[0] === ".")
-            return callNativeFunction(x, env);
+            return getJsProperty(x, env);
         readMacro = readMacros[first];
         if (readMacro)
             return readMacro.apply(null, [env].concat(x));
@@ -196,7 +224,9 @@ var scheme = {};
     }
 
     scheme.eval = function(string, env) {
-        return evalAll(read(string), env);
+        return map(evalAll(read(string), env), function(result) {
+            return (result instanceof JsProperty) ? result.get() : result;
+        });
     };
 
     function httpGet(uri, callback) {
