@@ -3,12 +3,13 @@ scheme.js
 
 A Scheme implementation in JavaScript.
 
-This is still work in progress, the goal is (near) R5RS compliance.
+This is still work in progress, the goal is (near)
+[R5RS](http://schemers.org/Documents/Standards/R5RS/) compliance.
 
 Running the REPL
 ----------------
 
-There are two rays to run a REPL:
+There are two ways to run a REPL:
 
 ### From the browser
 
@@ -37,8 +38,6 @@ just like JavaScript code. Like this:
         ((.alert js) "Hello, World!")
     </script>
     <script type="text/scheme" src="hello.scm"></script>
-
-_js_ refers to the global object, _window_ in the browser.
 
 Using scheme.js in Node.js
 --------------------------
@@ -82,6 +81,11 @@ In JavaScript, this would be:
 Think if it as retrieving the property _log_ of _console_ and
 executing it as a function, which is exactly how it works in
 JavaScript.
+
+### Global variables
+
+_js_ refers to the global object, _window_ in the browser and
+_globals_ in Node.js.
 
 Running the tests
 -----------------
