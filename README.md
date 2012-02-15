@@ -34,7 +34,7 @@ just like JavaScript code. Like this:
 
     <script src="scheme.js"></script>
     <script type="text/scheme">
-        (.alert js "Hello, World!")
+        ((.alert js) "Hello, World!")
     </script>
     <script type="text/scheme" src="hello.scm"></script>
 
@@ -50,18 +50,38 @@ You can either execute a scheme file via the REPL:
 Or evaluate scheme from a JavaScript file:
 
     var scheme = require("./scheme.js");
-    scheme.eval('(.log console "Hello, World!")', new scheme.Environment);
+    scheme.eval('((.log console) "Hello, World!")', new scheme.Environment);
 
-Calling JavaScript functions
+JavaScript interoperabillity
 ----------------------------
 
-You can call a JavaScript function, e.g. console.log, like this:
+### Getting a property
 
-    (.log console "Hello, World!")
+    (.x y)
 
-In JavaScript, this would look like this:
+In JavaScript, this would be:
+
+    y.x;
+
+### Setting a property
+
+    (set! (.x y) "foo")
+
+In JavaScript, this would be:
+
+    y.x = "foo";
+
+### Calling a function
+
+    ((.log console) "Hello, World!")
+
+In JavaScript, this would be:
 
     console.log("Hello, World!");
+
+Think if it as retrieving the property _log_ of _console_ and
+executing it as a function, which is exactly how it works in
+JavaScript.
 
 Running the tests
 -----------------

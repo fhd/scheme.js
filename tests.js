@@ -69,18 +69,26 @@ module.exports = {
         test.equal(this.evalFirst('"hello"'), "hello");
         test.done();
     },
-    testExecuteJavaScriptFunction: function(test) {
+    testJavaScriptFunctions: function(test) {
         var stubWasCalled = false;
         stub = function() {
             stubWasCalled = true;
         };
-        this.eval("(.stub js)");
+        this.eval("((.stub js))");
         test.ok(stubWasCalled,
                 "The JavaScript function stub() should have been called");
         delete stub;
-        test.equal(this.evalFirst("(.substring (quote hello) 0 4)"), "hell");
+        test.equal(this.evalFirst('((.substring "hello") 0 4)'), "hell");
         this.eval('(define s "hello")');
-        test.equal(this.evalFirst("(.substring s 0 4)"), "hell");
+        test.equal(this.evalFirst("((.substring s) 0 4)"), "hell");
+        test.done();
+    },
+    testJavaScriptVariables: function(test) {
+        foo = "bar";
+        test.equal(this.eval("(.foo js)"), "bar");
+        this.eval('(set! (.foo js) "foobar")');
+        test.equal(foo, "foobar");
+        delete foo;
         test.done();
     },
     testBegin: function(test) {
