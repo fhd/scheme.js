@@ -1,4 +1,4 @@
-var scheme = require("./scheme.js");
+var scheme = require("../src/scheme.js");
 
 module.exports = {
     setUp: function(callback) {

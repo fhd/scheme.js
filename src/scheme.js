@@ -115,13 +115,14 @@ var scheme = {};
     }
 
     scheme.Environment = function(entries, outer) {
+        var that;
         this.entries = entries || {};
         this.outer = outer || null;
         if (!(entries || outer)) {
-            this.entries["="] = function(first, second) {
+            this.entries["="] =  function(first, second) {
                 return first === second;
             };
-            var that = this;
+            that = this;
             forEach(["+", "-", "*", "/", ">", "<", ">=", "<="],
                     function(operator) {
                         that.entries[operator] = function(first, second) {

@@ -21,11 +21,11 @@ Just open _browser-repl/index.html_ in a browser.
 
 To start an interactive session:
 
-    node repl.js
+    node src/repl.js
 
 To process a file:
 
-    node repl.js file.scm
+    node src/repl.js file.scm
 
 Using scheme.js in a website
 ----------------------------
@@ -44,11 +44,11 @@ Using scheme.js in Node.js
 
 You can either execute a scheme file via the REPL:
 
-    node repl.js hello.scm
+    node src/repl.js hello.scm
 
 Or evaluate scheme from a JavaScript file:
 
-    var scheme = require("./scheme.js");
+    var scheme = require("scheme.js");
     scheme.eval('((.log console) "Hello, World!")', new scheme.Environment);
 
 JavaScript interoperabillity
@@ -95,4 +95,4 @@ Running the tests
 
 You can run the tests like this:
 
-    nodeunit tests.js
+    nodeunit test
