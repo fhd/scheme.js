@@ -136,7 +136,10 @@ var scheme = {};
                     });
                     return str;
                 },
-                "cons": cons
+                "cons": cons,
+                "apply": function(procedure, args) {
+                    return callProcedure([procedure].concat(args));
+                }
             };
             that = this;
             forEach(["+", "-", "*", "/", ">", "<", ">=", "<="],
@@ -261,7 +264,7 @@ var scheme = {};
     }
 
     function callProcedure(x, env) {
-        var expressions = evalAll(x, env),
+        var expressions = (env) ? evalAll(x, env) : x,
             firstExpression = expressions[0];
         if (!firstExpression)
             throw x[0] + " is not a procedure";

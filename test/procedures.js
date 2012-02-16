@@ -40,5 +40,11 @@ module.exports = {
         test.deepEqual(utils.evalFirst("(cons '(1) '(2 3))"), [[1], 2, 3]);
         test.deepEqual(utils.evalFirst("(cons 1 2)"), {car: 1, cdr: 2});
         test.done();
+    },
+    testApply: function(test) {
+        test.equal(utils.evalFirst("(apply + '(1 2))"), 3);
+        test.equal(utils.evalFirst(
+            '(apply string-append \'("Hello" ", " "World"))'), "Hello, World");
+        test.done();
     }
 }
