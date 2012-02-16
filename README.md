@@ -29,11 +29,28 @@ To process a file:
 
     bin/schemejs file.scm
 
+You can also install the REPL to /usr/local/bin like this:
+
+    make install
+
+Building scheme.js
+------------------
+
+Build it like this:
+
+    make
+
+This will put _dist/scheme.js_ in place.
+
+_This step isn't really required yet because scheme.js is just one
+source file anyway. But it won't be for long. Plus there will be a
+minified version_.
+
 Using scheme.js in a website
 ----------------------------
 
-If you include scheme.js, you can include scheme code via script tags,
-just like JavaScript code. Like this:
+If you include _dist/scheme.js_, you can include scheme code via
+script tags, just like JavaScript code. Like this:
 
     <script src="scheme.js"></script>
     <script type="text/scheme">
@@ -46,7 +63,7 @@ Using scheme.js in Node.js
 
 You can either execute a scheme file via the REPL:
 
-    schemejs hello.scm
+    bin/schemejs hello.scm
 
 Or evaluate scheme from a JavaScript file:
 
