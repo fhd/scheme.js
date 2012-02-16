@@ -40,19 +40,18 @@ Build it like this:
 
     make
 
-This will put _dist/scheme.js_ in place.
-
-_This step isn't really required yet because scheme.js is just one
-source file anyway. But it won't be for long. Plus there will be a
-minified version_.
+This will put _dist/scheme.js_ and _dist/scheme.min.js_ in place. The
+latter only if you have [UglifyJS](https://github.com/mishoo/UglifyJS)
+installed.
 
 Using scheme.js in a website
 ----------------------------
 
-If you include _dist/scheme.js_, you can include scheme code via
-script tags, just like JavaScript code. Like this:
+If you include _dist/scheme.js_ or _dist/scheme.min.js_, you can
+include scheme code via script tags, just like JavaScript code. Like
+this:
 
-    <script src="scheme.js"></script>
+    <script src="scheme.min.js"></script>
     <script type="text/scheme">
         ((.alert js) "Hello, World!")
     </script>
@@ -65,9 +64,9 @@ You can either execute a scheme file via the REPL:
 
     repl/schemejs hello.scm
 
-Or evaluate scheme from a JavaScript file:
+Or evaluate Scheme from JavaScript:
 
-    var scheme = require("scheme.js");
+    var scheme = require("scheme.min.js");
     scheme.eval('((.log console) "Hello, World!")', new scheme.Environment);
 
 JavaScript interoperabillity

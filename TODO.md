@@ -5,7 +5,6 @@ This is a list of the things that are on the agenda right now.
 * Support generation of JavaScript objects
 * Support try/catch
 * Support new
-* Provide a minified scheme.js for download
 * Add a simple Scheme tutorial to the REPLs
 * Use scheme.js for browser-repl and GitHub page
 * Implement tail recursion optimization (R5RS 3.5)
