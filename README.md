@@ -1,21 +1,23 @@
 scheme.js
 =========
 
-Scheme for the browser and [Node.js](http://nodejs.org).
+Scheme for the browser and [Node.js](http://nodejs.org). You can
+[try it right now](http://fhd.github.com/scheme.js/).
 
 This is still work in progress, the goal is (near)
 [R5RS](http://schemers.org/Documents/Standards/R5RS/) compliance.
+Have a look at the
+[TODO](https://github.com/fhd/scheme.js/blob/master/TODO.md) to see
+what's on the agenda.
 
 Running the REPL
 ----------------
 
-There are two ways to run a REPL:
-
-### From the browser
+### In the browser
 
 Just open _browser-repl/index.html_ in a browser.
 
-### From the command-line
+### On the command-line
 
 Node.js is required.
 
@@ -78,7 +80,7 @@ In JavaScript, this would be:
 
     console.log("Hello, World!");
 
-Think if it as retrieving the property _log_ of _console_ and
+Think of it as retrieving the property _log_ of _console_ and
 executing it as a function, which is exactly how it works in
 JavaScript.
 

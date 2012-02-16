@@ -1,12 +1,15 @@
-The goal is R5RS compliance. This is a list of the (IMO) most
-important issues.
+The goal is R5RS compliance, and support for the most popular SRFIs.
+This is a list of the things that are on the agenda right now.
 
-* Print results nicer in the REPLs
+* Nicer results printing in the REPLs
 * Support generation of JavaScript objects
 * Support try/catch
 * Support new
+* Provide a minified scheme.js for download
+* Add a simple Scheme tutorial to the REPLs
 * Use scheme.js for browser-repl and GitHub page
 * Implement tail recursion optimization (R5RS 3.5)
+* Add scheme.js to npm
 * Support macros
 * Support compilation to JS
 * Support do
@@ -17,4 +20,3 @@ important issues.
 * Implement persistent data structures
 * Implement remaining standard procedures (R5RS 6)
 * Support remaining notation (R5RS 2.3)
-* Support SRFIs
