@@ -3,8 +3,6 @@ important issues.
 
 * Implement cons
 * Implement apply
-* Support quoting via '
-* Support pairs
 * Support generation of JavaScript objects
 * Support try/catch
 * Support new

@@ -37,6 +37,8 @@ module.exports = {
     testQuoting: function(test) {
         test.equal(utils.evalFirst("(quote hello)"), "hello");
         test.deepEqual(utils.evalFirst("(quote (1 2 3))"), [1, 2, 3]);
+        test.equal(utils.evalFirst("'hello"), "hello");
+        test.deepEqual(utils.evalFirst("'(1 2 3)"), [1, 2, 3]);
         test.done();
     },
     testStrings: function(test) {

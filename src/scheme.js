@@ -192,7 +192,9 @@ var scheme = {};
             throw "Unexpected EOF while reading";
         token = tokens[0];
         tokens.shift();
-        if (token === "(") {
+        if (token === "'") {
+            return [new Symbol("quote"), readTokens(tokens)];
+        } else if (token === "(") {
             list = [];
             while (tokens[0] !== ")")
                 list.push(readTokens(tokens));
@@ -250,9 +252,11 @@ var scheme = {};
     }
 
     function eval(x, env) {
-        var first, firstChar, readMacro, expressions, firstExpression;
-        if (x instanceof Symbol)
-            return env.get(x.toString());
+        var name, first, firstChar, readMacro, expressions, firstExpression;
+        if (x instanceof Symbol) {
+            name = x.toString();
+            return (name[0] === "'") ? name.substring(1) : env.get(name);
+        }
         if (!isArray(x))
             return x;
         first = x[0];
