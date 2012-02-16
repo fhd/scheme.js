@@ -1,7 +1,6 @@
 The goal is R5RS compliance. This is a list of the (IMO) most
 important issues.
 
-* Implement string-append
 * Implement cons
 * Implement apply
 * Support quoting via '
