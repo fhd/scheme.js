@@ -1,7 +1,7 @@
 scheme.js
 =========
 
-A Scheme implementation in JavaScript.
+Scheme for the browser and [Node.js](http://nodejs.org).
 
 This is still work in progress, the goal is (near)
 [R5RS](http://schemers.org/Documents/Standards/R5RS/) compliance.
@@ -17,7 +17,7 @@ Just open _browser-repl/index.html_ in a browser.
 
 ### From the command-line
 
-[Node.js](http://nodejs.org) is required.
+Node.js is required.
 
 To start an interactive session:
 
@@ -90,8 +90,8 @@ _globals_ in Node.js.
 Running the tests
 -----------------
 
-[Node.js](http://nodejs.org) and
-[Node Unit](https://github.com/caolan/nodeunit) are required.
+Node.js and [Node Unit](https://github.com/caolan/nodeunit) are
+required.
 
 You can run the tests like this:
 
