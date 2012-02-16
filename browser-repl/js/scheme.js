@@ -119,8 +119,19 @@ var scheme = {};
         this.entries = entries || {};
         this.outer = outer || null;
         if (!(entries || outer)) {
-            this.entries["="] =  function(first, second) {
-                return first === second;
+            this.entries = {
+                "=": function(first, second) {
+                    return first === second;
+                },
+                "string-append": function() {
+                    // TODO: This is a library procedure, it should be
+                    //       implemented in Scheme.
+                    var str = "";
+                    forEach(arguments, function(s) {
+                        str += s;
+                    });
+                    return str;
+                }
             };
             that = this;
             forEach(["+", "-", "*", "/", ">", "<", ">=", "<="],
@@ -147,7 +158,7 @@ var scheme = {};
     }
 
     function tokenise(expression) {
-        return expression.match(/(".*"|[()]|[^\s()]+)/g);
+        return expression.match(/("[^"]*"|[()]|[^\s()]+)/g);
     }
 
     function readAtom(token) {
