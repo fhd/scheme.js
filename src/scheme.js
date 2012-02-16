@@ -131,6 +131,10 @@ var scheme = {};
                         str += s;
                     });
                     return str;
+                },
+                "cons": function(car, cdr) {
+                    return (isArray(cdr)) ? [car].concat(cdr) :
+                        [car, new Symbol("."), cdr];
                 }
             };
             that = this;

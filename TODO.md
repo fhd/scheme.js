@@ -1,7 +1,6 @@
 The goal is R5RS compliance. This is a list of the (IMO) most
 important issues.
 
-* Implement cons
 * Implement apply
 * Support generation of JavaScript objects
 * Support try/catch
