@@ -98,6 +98,7 @@ module.exports = {
     testProcedures: function(test) {
         this.eval("(define (pow x) (* x x))");
         test.equal(this.evalFirst("(pow 10)"), 100);
+        test.equal(this.evalFirst("(pow (* 2 5))"), 100);
         test.done();
     },
     testComments: function(test) {
@@ -107,6 +108,11 @@ module.exports = {
     testBooleans: function(test) {
         test.equal(this.evalFirst("#t"), true);
         test.equal(this.evalFirst("#f"), false);
+        test.done();
+    },
+    testLet: function(test) {
+        test.equal(this.evalFirst("(let ((x 1) (y 2)) x y)"), 2);
+        test.equal(this.evalFirst("(let* ((x 1) (y (* 2 x))) y)"), 2);
         test.done();
     }
 };

@@ -37,7 +37,7 @@ var scheme = {};
                         lambdaArgs.length + ", got " + arguments.length;
                 argMap = {};
                 for (i = 0; i < lambdaArgs.length; i++)
-                    argMap[lambdaArgs[i]] = arguments[i];
+                    argMap[lambdaArgs[i]] = eval(arguments[i], env);
                 return eval(body, new scheme.Environment(argMap, env));
             };
         },
@@ -48,7 +48,7 @@ var scheme = {};
         },
         "begin": function(env) {
             var result;
-            forEach(Array.prototype.slice.call(arguments, 1), function(arg) {
+            forEach(Array.prototype.slice.call(arguments, 2), function(arg) {
                 result = eval(arg, env);
             });
             return result;
@@ -58,6 +58,23 @@ var scheme = {};
         },
         "or": function(env, _, first, second) {
             return eval(first, env) || eval(second, env);
+        },
+        "let": function(env, _, bindings) {
+            var bindingMap = {};
+            forEach(bindings, function(binding) {
+                bindingMap[binding[0]] = eval(binding[1], env);
+            });
+            return evalLetBody(new scheme.Environment(bindingMap, env),
+                               arguments);
+        },
+        "let*": function(env, _, bindings) {
+            var bindingMap = {},
+                newEnv;
+            forEach(bindings, function(binding) {
+                bindingMap[binding[0]] = eval(binding[1], newEnv);
+                newEnv = new scheme.Environment(bindingMap, env);
+            });
+            return evalLetBody(newEnv, arguments);
         }
     },
     Symbol = function(s) {
@@ -90,6 +107,11 @@ var scheme = {};
         var i;
         for (i = 0; i < array.length; i++)
             f(array[i]);
+    }
+
+    function evalLetBody(env, letArgs) {
+        return readMacros["begin"].apply(null, [env, null].concat(
+            Array.prototype.slice.call(letArgs, 3)));
     }
 
     scheme.Environment = function(entries, outer) {
