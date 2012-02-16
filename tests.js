@@ -99,5 +99,9 @@ module.exports = {
         this.eval("(define (pow x) (* x x))");
         test.equal(this.evalFirst("(pow 10)"), 100);
         test.done();
+    },
+    testComments: function(test) {
+        test.ok(this.eval("1 ; 2").length === 1);
+        test.done();
     }
 };

@@ -1,7 +1,6 @@
 The goal is R5RS compliance. This is a list of the (IMO) most
 important issues.
 
-* Remove comments
 * Support boolean literals
 * Support let and let*
 * Support quoting via '

@@ -119,6 +119,10 @@ var scheme = {};
         }
     };
 
+    function removeComments(expression) {
+        return expression.replace(/;.*/g, "");
+    }
+
     function tokenise(expression) {
         return expression.match(/(".*"|[()]|[^\s()]+)/g);
     }
@@ -158,7 +162,7 @@ var scheme = {};
     }
 
     function read(expression) {
-        var tokens = tokenise(expression),
+        var tokens = tokenise(removeComments(expression)),
             representation = [];
         while (tokens.length)
             representation.push(readTokens(tokens));
