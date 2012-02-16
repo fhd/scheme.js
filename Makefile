@@ -13,11 +13,12 @@ $(DIST_DIR):
 $(SCM): src/scheme.js $(DIST_DIR)
 	cp $< $(SCM)
 
-install: $(SCM) src/repl.js
+install: repl/schemejs $(SCM)
 	mkdir -p $(LIB_DIR)
 	mkdir -p $(BIN_DIR)
-	cp $^ $(LIB_DIR)
-	sed "s/src\//lib\/schemejs\//" bin/schemejs > $(BIN)
+	cp $+ $(LIB_DIR)
+	ln -fs $(LIB_DIR)/schemejs $(BIN_DIR)
+	sed -i "s/..\/src/..\/lib\/schemejs/" $(BIN)
 	chmod +x $(BIN)
 
 uninstall:

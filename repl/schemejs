@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 var args = process.argv.slice(2),
-    scheme = require("./scheme.js"),
+    scheme = require("../src/scheme.js"),
     env = new scheme.Environment;
 
 function print(result) {

@@ -23,11 +23,11 @@ Node.js is required.
 
 To start an interactive session:
 
-    bin/schemejs
+    repl/schemejs
 
 To process a file:
 
-    bin/schemejs file.scm
+    repl/schemejs file.scm
 
 You can also install the REPL to /usr/local/bin like this:
 
@@ -63,7 +63,7 @@ Using scheme.js in Node.js
 
 You can either execute a scheme file via the REPL:
 
-    bin/schemejs hello.scm
+    repl/schemejs hello.scm
 
 Or evaluate scheme from a JavaScript file:
 
