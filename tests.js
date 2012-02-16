@@ -103,5 +103,10 @@ module.exports = {
     testComments: function(test) {
         test.ok(this.eval("1 ; 2").length === 1);
         test.done();
+    },
+    testBooleans: function(test) {
+        test.equal(this.evalFirst("#t"), true);
+        test.equal(this.evalFirst("#f"), false);
+        test.done();
     }
 };

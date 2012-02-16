@@ -131,11 +131,20 @@ var scheme = {};
         var first = token[0],
             lastIndex = token.length - 1,
             last = token[lastIndex],
-            number;
+            rest, number;
         if (first === '"' || last === '"') {
             if (first !== last)
                 throw "Unexpected EOF while reading string";
             return token.substring(1, lastIndex);
+        }
+        if (first === "#") {
+            rest = token.substring(1);
+            if (rest === "t")
+                return true;
+            else if (rest === "f")
+                return false;
+            else
+                throw "Not a valid boolean literal: " + rest;
         }
         number = parseFloat(token);
         if (!isNaN(number))
