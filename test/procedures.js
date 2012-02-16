@@ -38,7 +38,7 @@ module.exports = {
         test.deepEqual(utils.evalFirst("(cons 1 '(2 3))"), [1, 2, 3]);
         test.deepEqual(utils.evalFirst("(cons 1 '())"), [1]);
         test.deepEqual(utils.evalFirst("(cons '(1) '(2 3))"), [[1], 2, 3]);
-        test.deepEqual(utils.evalFirst("(cons 1 2)"), [1, {s: "."}, 2]);
+        test.deepEqual(utils.evalFirst("(cons 1 2)"), {car: 1, cdr: 2});
         test.done();
     }
 }

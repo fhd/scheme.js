@@ -63,5 +63,28 @@ module.exports = {
         test.equal(utils.evalFirst("(let ((x 1) (y 2)) x y)"), 2);
         test.equal(utils.evalFirst("(let* ((x 1) (y (* 2 x))) y)"), 2);
         test.done();
+    },
+    testPairs: function(test) {
+        test.deepEqual(utils.evalFirst("'(1 . 2)"), {car: 1, cdr: 2});
+        test.deepEqual(utils.evalFirst("'(1 . ())"), [1]);
+        test.deepEqual(utils.evalFirst("'(1 . (2 . ()))"), [1, 2]);
+        test.deepEqual(utils.evalFirst("'(1 . (2 . (3 . ())))"), [1, 2, 3]);
+        test.deepEqual(utils.evalFirst("'(1 . (2 . 3))"), [1, 2, {s: "."}, 3]);
+        test.done();
+    },
+    testDottedLists: function(test) {
+        const dot = {s: "."};
+        test.deepEqual(utils.evalFirst("'(1 2 . 3)"), [1, 2, dot, 3]);
+        test.deepEqual(utils.evalFirst("'(1 . .)"), {car: 1, cdr: dot});
+        test.deepEqual(utils.evalFirst("'(1 2 . .)"), [1, 2, dot, dot]);
+        test.throws(utils.evalFirst.bind(null, "'(.)"));
+        test.throws(utils.evalFirst.bind(null, "'(1 .)"));
+        test.throws(utils.evalFirst.bind(null, "'(. 2)"));
+        test.throws(utils.evalFirst.bind(null, "'(1 . 2 3)"));
+        test.throws(utils.evalFirst.bind(null, "'(1 2 . 3 4)"));
+        test.throws(utils.evalFirst.bind(null, "'(. .)"));
+        test.throws(utils.evalFirst.bind(null, "'(. . .)"));
+        test.throws(utils.evalFirst.bind(null, "'(1 . . .)"));
+        test.done();
     }
 };

@@ -83,6 +83,10 @@ var scheme = {};
     JsProperty = function(object, property) {
         this.object = object;
         this.property = property;
+    },
+    Pair = function(car, cdr) {
+        this.car = car;
+        this.cdr = cdr;
     };
 
     Symbol.prototype = {
@@ -132,10 +136,7 @@ var scheme = {};
                     });
                     return str;
                 },
-                "cons": function(car, cdr) {
-                    return (isArray(cdr)) ? [car].concat(cdr) :
-                        [car, new Symbol("."), cdr];
-                }
+                "cons": cons
             };
             that = this;
             forEach(["+", "-", "*", "/", ">", "<", ">=", "<="],
@@ -189,9 +190,17 @@ var scheme = {};
             return number;
         return new Symbol(token);
     }
+
+    function cons(car, cdr) {
+        if (isArray(cdr))
+            return (cdr.length) ? [car].concat(cdr) : [car];
+        if (cdr instanceof Pair)
+            return [car].concat(cdr.car, new Symbol("."), cdr.cdr);
+        return new Pair(car, cdr);
+    }
     
     function readTokens(tokens) {
-        var token, list, i;
+        var token, isPair, i, list;
         if (tokens.length === 0)
             throw "Unexpected EOF while reading";
         token = tokens[0];
@@ -203,6 +212,14 @@ var scheme = {};
             while (tokens[0] !== ")")
                 list.push(readTokens(tokens));
             tokens.shift();
+            for (i = 0; i < list.length; i++)
+                if (list[i].toString() === ".") {
+                    if (i === 0 || i !== list.length - 2)
+                        throw "Invalid dotted list";
+                    if (list.length === 3)
+                        return cons(list[0], list[2]);
+                    break;
+                }
             return list;
         } else if (token === ")")
             throw "Unexpected )";
