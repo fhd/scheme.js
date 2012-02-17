@@ -21,7 +21,7 @@ $(SCM_MIN): $(SCM) $(DIST_DIR)
 		echo "Unable to find UglifyJS, not minifiying."; \
 	fi
 
-install: repl/schemejs $(SCM_MIN)
+install: bin/schemejs $(SCM_MIN)
 	mkdir -p $(LIB_DIR)
 	mkdir -p $(BIN_DIR)
 	cp $+ $(LIB_DIR)
