@@ -1,11 +1,3 @@
-function format(result) {
-    var formatted = "";
-    $.each(result, function(index, value) {
-        formatted += value + "\n";
-    });
-    return formatted;
-}
-
 $(function() {
     var env = new scheme.Environment,
         shell = $("#shell");
@@ -15,7 +7,7 @@ $(function() {
             if (!line.length)
                 return "";
             try {
-                return format(scheme.eval(line, env));
+                return scheme.print(scheme.eval(scheme.read(line), env));
             } catch (e) {
                 return "Error: " + e;
             }
