@@ -4,15 +4,10 @@ var args = process.argv.slice(2),
     scheme = require("../src/scheme.js"),
     env = new scheme.Environment;
 
-function print(result) {
-    result.forEach(function(item) {
-        console.log(item);
-    });
-}
-
-function rep(expression) {
+function rep(string) {
     try {
-        print(scheme.eval(expression, env));
+        process.stdout.write(scheme.print(
+            scheme.eval(scheme.read(string), env)));
     } catch (e) {
         console.error("Error: " + e);
     }

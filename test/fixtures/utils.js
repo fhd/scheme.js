@@ -6,11 +6,9 @@ exports.resetEnv = function() {
 };
 
 exports.eval = function(expression) {
-    return scheme.eval(expression, env);
+    return scheme.eval(scheme.read(expression), env);
 };
 
 exports.evalFirst = function(expression) {
     return exports.eval(expression)[0];
 };
-
-

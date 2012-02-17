@@ -161,12 +161,12 @@ var scheme = {};
         }
     };
 
-    function removeComments(expression) {
-        return expression.replace(/;.*/g, "");
+    function removeComments(string) {
+        return string.replace(/;.*/g, "");
     }
 
-    function tokenise(expression) {
-        return expression.match(/("[^"]*"|[()]|[^\s()]+)/g);
+    function tokenise(string) {
+        return string.match(/("[^"]*"|[()]|[^\s()]+)/g);
     }
 
     function readAtom(token) {
@@ -230,8 +230,8 @@ var scheme = {};
             return readAtom(token);
     }
 
-    function read(expression) {
-        var tokens = tokenise(removeComments(expression)),
+    scheme.read = function(string) {
+        var tokens = tokenise(removeComments(string)),
             representation = [];
         while (tokens.length)
             representation.push(readTokens(tokens));
@@ -249,9 +249,9 @@ var scheme = {};
         return newArray;
     }
 
-    function getJsProperty(x, env) {
-        var name = x[0].toString().substring(1),
-            objExpr = x[1],
+    function getJsProperty(list, env) {
+        var name = list[0].toString().substring(1),
+            objExpr = list[1],
             objName, obj, args;
         if (objExpr instanceof Symbol) {
             objName = objExpr.toString();
@@ -259,50 +259,53 @@ var scheme = {};
                 eval(objExpr, env) || this.eval(objName);
         } else
             obj = objExpr;
-        args = evalAll(x.slice(2), env);
+        args = evalAll(list.slice(2), env);
         return new JsProperty(obj, name);
     }
 
-    function callProcedure(x, env) {
-        var expressions = (env) ? evalAll(x, env) : x,
-            firstExpression = expressions[0];
-        if (!firstExpression)
-            throw x[0] + " is not a procedure";
-        expressions.shift();
-        if (firstExpression instanceof JsProperty)
-            return firstExpression.get().apply(firstExpression.object,
-                                               expressions);
-        return firstExpression.apply(null, expressions);
+    function callProcedure(list, env) {
+        var results = (env) ? evalAll(list, env) : list,
+            firstResult = results[0];
+        if (!firstResult)
+            throw list[0] + " is not a procedure";
+        results.shift();
+        if (firstResult instanceof JsProperty)
+            return firstResult.get().apply(firstResult.object, results);
+        return firstResult.apply(null, results);
     }
 
-    function eval(x, env) {
-        var name, first, firstChar, readMacro, expressions, firstExpression;
-        if (x instanceof Symbol) {
-            name = x.toString();
+    function eval(sexp, env) {
+        var name, first, firstChar, readMacro;
+        if (sexp instanceof Symbol) {
+            name = sexp.toString();
             return (name[0] === "'") ? name.substring(1) : env.get(name);
         }
-        if (!isArray(x))
-            return x;
-        first = x[0];
+        if (!isArray(sexp))
+            return sexp;
+        first = sexp[0];
         if (first instanceof Symbol && first.toString()[0] === ".")
-            return getJsProperty(x, env);
+            return getJsProperty(sexp, env);
         readMacro = readMacros[first];
         if (readMacro)
-            return readMacro.apply(null, [env].concat(x));
-        return callProcedure(x, env);
+            return readMacro.apply(null, [env].concat(sexp));
+        return callProcedure(sexp, env);
     }
 
-    function evalAll(xs, env) {
-        return map(xs, function(x) {
-            return eval(x, env);
+    function evalAll(sexps, env) {
+        return map(sexps, function(sexp) {
+            return eval(sexp, env);
         });
     }
 
-    scheme.eval = function(string, env) {
-        return map(evalAll(read(string), env), function(result) {
-            return (result instanceof JsProperty) ? result.get() : result;
+    scheme.eval = evalAll;
+
+    scheme.print = function(results) {
+        var s = "";
+        forEach(results, function(result) {
+            s += (result instanceof JsProperty) ? result.get() : result + "\n";
         });
-    };
+        return s;
+    }
 
     function httpGet(uri, callback) {
         var httpRequest;
@@ -332,7 +335,7 @@ var scheme = {};
                     return;
                 if (script.src.length)
                     httpGet(script.src, function(data) {
-                        scheme.eval(data);
+                        scheme.eval(scheme.read(data));
                     });
                 else
                     scheme.eval(script.innerHTML);
