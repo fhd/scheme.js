@@ -1,4 +1,4 @@
-var scheme = {};
+var scheme = (typeof exports !== "undefined") ? exports : {};
 
 (function(scheme) {
     var readMacros = {
@@ -13,13 +13,13 @@ var scheme = {};
             }
             name = first[0];
             args = first.slice(1);
-            body = [new Symbol("begin")]
+            body = [new scheme.Symbol("begin")]
                 .concat(Array.prototype.slice.call(arguments, 3));
             env.set(name, readMacros["lambda"](env, _, args, body));
         },
         "set!": function(env, _, variable, value) {
             var name;
-            if (variable instanceof Symbol) {
+            if (variable instanceof scheme.Symbol) {
                 name = variable.toString();
                 if (!env.get(name))
                     throw "Unbound variable: " + name;
@@ -42,7 +42,7 @@ var scheme = {};
             };
         },
         "quote": function(env, _, value) {
-            if (value instanceof Symbol)
+            if (value instanceof scheme.Symbol)
                 return value.toString();
             return value;
         },
@@ -77,9 +77,6 @@ var scheme = {};
             return evalLetBody(newEnv, arguments);
         }
     },
-    Symbol = function(s) {
-        this.s = s;
-    },
     JsProperty = function(object, property) {
         this.object = object;
         this.property = property;
@@ -87,12 +84,6 @@ var scheme = {};
     Pair = function(car, cdr) {
         this.car = car;
         this.cdr = cdr;
-    };
-
-    Symbol.prototype = {
-        toString: function() {
-            return this.s;
-        }
     };
 
     JsProperty.prototype = {
@@ -161,6 +152,15 @@ var scheme = {};
         }
     };
 
+    scheme.Symbol = function(s) {
+        this.s = s;
+    },
+    scheme.Symbol.prototype = {
+        toString: function() {
+            return this.s;
+        }
+    };
+
     function removeComments(string) {
         return string.replace(/;.*/g, "");
     }
@@ -191,14 +191,14 @@ var scheme = {};
         number = parseFloat(token);
         if (!isNaN(number))
             return number;
-        return new Symbol(token);
+        return new scheme.Symbol(token);
     }
 
     function cons(car, cdr) {
         if (isArray(cdr))
             return (cdr.length) ? [car].concat(cdr) : [car];
         if (cdr instanceof Pair)
-            return [car].concat(cdr.car, new Symbol("."), cdr.cdr);
+            return [car].concat(cdr.car, new scheme.Symbol("."), cdr.cdr);
         return new Pair(car, cdr);
     }
     
@@ -209,7 +209,7 @@ var scheme = {};
         token = tokens[0];
         tokens.shift();
         if (token === "'") {
-            return [new Symbol("quote"), readTokens(tokens)];
+            return [new scheme.Symbol("quote"), readTokens(tokens)];
         } else if (token === "(") {
             list = [];
             while (tokens[0] !== ")")
@@ -253,7 +253,7 @@ var scheme = {};
         var name = list[0].toString().substring(1),
             objExpr = list[1],
             objName, obj, args;
-        if (objExpr instanceof Symbol) {
+        if (objExpr instanceof scheme.Symbol) {
             objName = objExpr.toString();
             obj = (objName === "js") ? this :
                 eval(objExpr, env) || this.eval(objName);
@@ -276,14 +276,14 @@ var scheme = {};
 
     function eval(sexp, env) {
         var name, first, firstChar, readMacro;
-        if (sexp instanceof Symbol) {
+        if (sexp instanceof scheme.Symbol) {
             name = sexp.toString();
             return (name[0] === "'") ? name.substring(1) : env.get(name);
         }
         if (!isArray(sexp))
             return sexp;
         first = sexp[0];
-        if (first instanceof Symbol && first.toString()[0] === ".")
+        if (first instanceof scheme.Symbol && first.toString()[0] === ".")
             return getJsProperty(sexp, env);
         readMacro = readMacros[first];
         if (readMacro)
@@ -297,12 +297,16 @@ var scheme = {};
         });
     }
 
-    scheme.eval = evalAll;
+    scheme.eval = function(sexps, env) {
+        return map(evalAll(sexps, env), function (result) {
+            return (result instanceof JsProperty) ? result.get() : result;
+        });
+    }
 
     scheme.print = function(results) {
         var s = "";
         forEach(results, function(result) {
-            s += (result instanceof JsProperty) ? result.get() : result + "\n";
+            s += result + "\n";
         });
         return s;
     }
@@ -342,4 +346,4 @@ var scheme = {};
             });
         };
     }
-})(typeof exports !== "undefined" && exports || scheme);
+})(scheme);

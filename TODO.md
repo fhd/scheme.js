@@ -10,7 +10,6 @@ This is a list of the things that are on the agenda right now.
 * Implement tail recursion optimization (R5RS 3.5)
 * Add scheme.js to npm
 * Support macros
-* Support compilation to JS
 * Support do
 * Support cond
 * Support character literals

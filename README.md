@@ -19,7 +19,9 @@ Just open _browser-repl/index.html_ in a browser.
 
 ### On the command-line
 
-Node.js is required.
+Node.js and
+[Commander.js](https://github.com/visionmedia/commander.js/) are
+required.
 
 To start an interactive session:
 
@@ -60,13 +62,13 @@ this:
 Using scheme.js in Node.js
 --------------------------
 
-You can either execute a scheme file via the REPL:
+You execute a scheme file via the REPL:
 
     bin/schemejs hello.scm
 
 Or evaluate Scheme from JavaScript:
 
-    var scheme = require("scheme.min.js");
+    var scheme = require("./scheme.min.js");
     scheme.eval('((.log console) "Hello, World!")', new scheme.Environment);
 
 JavaScript interoperabillity
@@ -104,6 +106,40 @@ JavaScript.
 
 _js_ refers to the global object, _window_ in the browser and
 _globals_ in Node.js.
+
+Compiling Scheme to JavaScript
+------------------------------
+
+You can compile Scheme code to JavaScript that will evaluate itself
+when loaded.
+
+    bin/schemejs -c hello.scm > hello.scm.js
+
+You can include the resulting script file in your page:
+
+    <script src="scheme.min.js"></script>
+    <script src="hello.scm.js"></script>
+
+And like this in Node.js:
+
+    var scheme = require("./scheme.min.js");
+    require("./hello.scm.js");
+
+Note that you have to load scheme.js before the script. If you want a
+really self-contained JS file, do this:
+
+    cp scheme.min.js hello.js
+    bin/schemejs -c hello.scm >> hello.js
+
+In any event, the code evaluates itself with the environment from the
+global variable _environment_. If the variable exists, it uses that,
+otherwise a fresh environment is created. So if you add several
+compiled source files they will automatically use the same
+environment.
+
+This isn't compilation in the proper sense: The result is just the
+parsed Scheme code in JavaScript data structures, wrapped in a _eval_
+call. It is still interpreted at runtime.
 
 Running the tests
 -----------------

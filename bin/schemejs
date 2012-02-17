@@ -1,13 +1,37 @@
 #!/usr/bin/env node
 
-var args = process.argv.slice(2),
-    scheme = require("../src/scheme.js"),
-    env = new scheme.Environment;
+var program, scheme, env;
 
-function rep(string) {
+function serialize(data) {
+    var s;
+    if (Array.isArray(data)) {
+        s = "[";
+        data.forEach(function(item) {
+            if (s.length > 1)
+                s += ",";
+            s += serialize(item);
+        });
+        return s + "]";
+    }
+    if (data instanceof scheme.Symbol)
+        return "new scheme.Symbol(" + serialize(data.toString()) + ")";
+    return JSON.stringify(data);
+}
+
+function rep(string, opts) {
+    var expressions, result;
     try {
-        process.stdout.write(scheme.print(
-            scheme.eval(scheme.read(string), env)));
+        expressions = scheme.read(string);
+        if (opts.compile) {
+            console.log("scheme.eval(" + serialize(expressions) +
+                        ", ((typeof environment !== 'undefined') ? " +
+                        "environment : (this.environment = " +
+                        "new scheme.Environment)));");
+            return;
+        }
+        results = scheme.eval(expressions, env);
+        if (opts.print)
+            process.stdout.write(scheme.print(results));
     } catch (e) {
         console.error("Error: " + e);
     }
@@ -20,7 +44,7 @@ function batch(file) {
             console.error(error);
             process.exit(1);
         } else {
-            rep(data);
+            rep(data, {compile: program.compile, print: program.print});
             process.exit(0);
         }
     });
@@ -33,7 +57,7 @@ function interactive() {
     rl.setPrompt("=> ");
     rl.on("line", function(cmd) {
         if (cmd.length)
-            rep(cmd);
+            rep(cmd, {print: true});
         rl.prompt();
     });
     rl.on("close", function() {
@@ -44,7 +68,31 @@ function interactive() {
     rl.prompt();
 }
 
-if (args.length)
-    batch(args[0]);
-else
+program = require("commander");
+
+program
+    .usage("[OPTIONS] [FILE]")
+    .option("-c, --compile", "compile to JavaScript")
+    .option("-p, --print", "also print after eval")
+    .on("--help", function(){
+        console.log("  Without any options, the input is read and evaluated.");
+        console.log("  When the file argument is omitted, an interactive " +
+                    "REPL is started.");
+        console.log("");
+        console.log("  Examples:");
+        console.log("");
+        console.log("    $ schemejs");
+        console.log("    $ schemejs hello.scm");
+        console.log("    $ schemejs -p hello.scm");
+        console.log("    $ schemejs -c hello.scm > hello.scm.js");
+        console.log("")
+    })
+    .parse(process.argv);
+
+scheme = require("../src/scheme.js"),
+env = new scheme.Environment;
+
+if (program.args.length < 1)
     interactive();
+else
+    batch(program.args[0]);
