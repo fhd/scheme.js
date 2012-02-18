@@ -43,5 +43,12 @@ module.exports = {
         test.deepEqual(utils.evalFirst('(new (.Date js) 2012 0 19)'),
                        new Date(2012, 0, 19));
         test.done();
+    },
+    testTryCatch: function(test) {
+        called = false;
+        utils.eval('(try (foo) (lambda (e) (set! (.called js) #t)))');
+        test.ok(called);
+        delete called;
+        test.done();
     }
 };

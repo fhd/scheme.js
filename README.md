@@ -126,6 +126,14 @@ In JavaScript, this would be:
 
     new Date(2012, 1, 19);
 
+### Exceptions
+
+    (try (...) (lambda (e) ...))
+
+In JavaScript, this would be:
+
+    try { ... } catch (e) { ... }
+
 Compiling Scheme to JavaScript
 ------------------------------
 

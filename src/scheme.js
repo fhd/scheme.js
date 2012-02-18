@@ -80,6 +80,16 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                 obj[property[0].toString()] = eval(property[1], env);
             });
             return obj;
+        },
+        "try": function(env, _, expression, catchCallback) {
+            try {
+                return eval(expression, env);
+            } catch (e) {
+                if (!catchCallback)
+                    throw e;
+                var f = eval(catchCallback, env);
+                return f(e);
+            }
         }
     },
     JsProperty = function(object, property) {
