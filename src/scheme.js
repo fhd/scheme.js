@@ -400,7 +400,7 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         window.onload = function() {
             var scripts = document.getElementsByTagName("script");
             forEach(scripts, function(script) {
-                if (script.type !== "text/scheme")
+                if (script.type !== "text/x-scheme")
                     return;
                 if (script.src.length)
                     httpGet(script.src, function(data) {

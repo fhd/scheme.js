@@ -54,10 +54,10 @@ include scheme code via script tags, just like JavaScript code. Like
 this:
 
     <script src="scheme.min.js"></script>
-    <script type="text/scheme">
+    <script type="text/x-scheme">
         ((.alert js) "Hello, World!")
     </script>
-    <script type="text/scheme" src="hello.scm"></script>
+    <script type="text/x-scheme" src="hello.scm"></script>
 
 Using scheme.js in Node.js
 --------------------------
