@@ -23,6 +23,10 @@ module.exports = {
         test.equal(utils.evalFirst("x"), 5);
         utils.eval("(set! x 6)");
         test.equal(utils.evalFirst("x"), 6);
+        utils.eval("(set! x 0)");
+        test.equal(utils.evalFirst("x"), 0);
+        utils.eval("(set! x #f)");
+        test.equal(utils.evalFirst("x"), false);
         test.done();
     },
     testLambdas: function(test) {

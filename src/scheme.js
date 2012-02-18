@@ -21,7 +21,7 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
             var name;
             if (variable instanceof scheme.Symbol) {
                 name = variable.toString();
-                if (!env.get(name))
+                if (typeof env.get(name) === "undefined")
                     throw "Unbound variable: " + name;
                 env.set(name, value);
             } else if (variable instanceof JsProperty)
@@ -174,8 +174,10 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
 
     scheme.Environment.prototype = {
         get: function(name) {
-            return this.entries[name]
-                || (this.outer ? this.outer.get(name) : null);
+            var value = this.entries[name];
+            if (typeof value !== "undefined")
+                return value;
+            return (this.outer) ? this.outer.get(name) : undefined;
         },
         set: function(name, value) {
             this.entries[name] = value;
