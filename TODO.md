@@ -1,7 +1,6 @@
 The goal is R5RS compliance, and support for the most popular SRFIs.
 This is a list of the things that are on the agenda right now.
 
-* Nicer results printing in the REPLs
 * Support generation of JavaScript objects
 * Support try/catch
 * Support new

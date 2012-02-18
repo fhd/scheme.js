@@ -42,8 +42,6 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
             };
         },
         "quote": function(env, _, value) {
-            if (value instanceof scheme.Symbol)
-                return value.toString();
             return value;
         },
         "begin": function(env) {
@@ -263,6 +261,10 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         return new JsProperty(obj, name);
     }
 
+    function isFunction(f) {
+        return f && {}.toString.call(f) === "[object Function]";
+    }
+
     function callProcedure(list, env) {
         var results = (env) ? evalAll(list, env) : list,
             firstResult = results[0];
@@ -278,7 +280,8 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         var name, first, firstChar, readMacro;
         if (sexp instanceof scheme.Symbol) {
             name = sexp.toString();
-            return (name[0] === "'") ? name.substring(1) : env.get(name);
+            return (name[0] === "'") ? new scheme.Symbol(name.substring(1)) :
+                env.get(name);
         }
         if (!isArray(sexp))
             return sexp;
@@ -303,10 +306,32 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         });
     }
 
+    function format(result) {
+        var s;
+        if (typeof result === "string")
+            return '"' + result + '"';
+        if (typeof result === "boolean")
+            return (result) ? "#t" : "#f";
+        if (result instanceof scheme.Symbol)
+            return result.toString();
+        if (isArray(result)) {
+            s = "(";
+            result.forEach(function(element) {
+                if (s.length > 1)
+                    s += " ";
+                s += format(element);
+            });
+            return s + ")";
+        }
+        if (isFunction(result))
+            return "#procedure";
+        return result;
+    }
+
     scheme.print = function(results) {
         var s = "";
         forEach(results, function(result) {
-            s += result + "\n";
+            s += format(result) + "\n";
         });
         return s;
     }
