@@ -31,12 +31,9 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         },
         "lambda": function(env, _, lambdaArgs, body) {
             return function() {
-                var argMap, i;
-                if (arguments.length !== lambdaArgs.length)
-                    throw "Invalid number of arguments. Expected " +
-                        lambdaArgs.length + ", got " + arguments.length;
-                argMap = {};
-                for (i = 0; i < lambdaArgs.length; i++)
+                var argMap = {}, i;
+                for (i = 0; i < Math.min(lambdaArgs.length, arguments.length);
+                     i++)
                     argMap[lambdaArgs[i]] = eval(arguments[i], env);
                 return eval(body, new scheme.Environment(argMap, env));
             };
@@ -341,7 +338,8 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
     }
 
     scheme.eval = function(sexps, env) {
-        return map(evalAll(sexps, env), function (result) {
+        return map(evalAll(sexps, env || new scheme.Environment),
+                           function (result) {
             return (result instanceof JsProperty) ? result.get() : result;
         });
     }
