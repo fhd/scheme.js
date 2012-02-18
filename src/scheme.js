@@ -8,14 +8,14 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         "define": function(env, _, first, second) {
             var name, args, body;
             if (!isArray(first)) {
-                env.set(first, eval(second, env));
+                env.define(first, eval(second, env));
                 return;
             }
             name = first[0];
             args = first.slice(1);
             body = [new scheme.Symbol("begin")]
                 .concat(Array.prototype.slice.call(arguments, 3));
-            env.set(name, readMacros["lambda"](env, _, args, body));
+            env.define(name, readMacros["lambda"](env, _, args, body));
         },
         "set!": function(env, _, variable, value) {
             var name;
@@ -179,8 +179,14 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                 return value;
             return (this.outer) ? this.outer.get(name) : undefined;
         },
-        set: function(name, value) {
+        define: function(name, value) {
             this.entries[name] = value;
+        },
+        set: function(name, value) {
+            if (this.outer && typeof this.outer.get(name) !== "undefined")
+                this.outer.set(name, value);
+            else
+                this.define(name, value);
         }
     };
 
