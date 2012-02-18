@@ -124,8 +124,6 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                     return first === second;
                 },
                 "string-append": function() {
-                    // TODO: This is a library procedure, it should be
-                    //       implemented in Scheme.
                     var str = "";
                     forEach(arguments, function(s) {
                         str += s;
@@ -135,6 +133,23 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                 "cons": cons,
                 "apply": function(procedure, args) {
                     return callProcedure([procedure].concat(args));
+                },
+                "new": function() {
+                    var s, i, result;
+                    this.schemeTemp = {
+                        constructor: arguments[0].get(),
+                        args: Array.prototype.slice.call(arguments, 1)
+                    };
+                    s = "new this.schemeTemp.constructor(";
+                    for (i = 0; i < this.schemeTemp.args.length; i++) {
+                        if (i > 0)
+                            s += ",";
+                        s += "this.schemeTemp.args[" + i + "]";
+                    }
+                    s += ");";
+                    result = this.eval(s);
+                    delete this.schemeTemp;
+                    return result;
                 }
             };
             that = this;

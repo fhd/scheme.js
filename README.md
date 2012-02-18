@@ -118,6 +118,14 @@ This will become:
 
     {"hello: "world, "foo": "bar"}
 
+### Instantiating JavaScript functions
+
+    (new (.Date js) 2012 1 19)
+
+In JavaScript, this would be:
+
+    new Date(2012, 1, 19);
+
 Compiling Scheme to JavaScript
 ------------------------------
 

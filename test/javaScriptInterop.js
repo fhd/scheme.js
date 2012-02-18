@@ -36,5 +36,12 @@ module.exports = {
                             '"world"))))))'),
             {nested: {hello: "world"}});
         test.done();
+    },
+    testNew: function(test) {
+        test.deepEqual(utils.evalFirst('(new (.String js) "Hello")'),
+                       new String("Hello"));
+        test.deepEqual(utils.evalFirst('(new (.Date js) 2012 0 19)'),
+                       new Date(2012, 0, 19));
+        test.done();
     }
 };
