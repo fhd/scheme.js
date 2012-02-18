@@ -26,5 +26,15 @@ module.exports = {
         test.equal(foo, "foobar");
         delete foo;
         test.done();
+    },
+    testCreateObject: function(test) {
+        test.deepEqual(
+            utils.evalFirst('(make-object ((hello "world")(foo "bar")))'),
+            {hello: "world", foo: "bar"});
+        test.deepEqual(
+            utils.evalFirst('(make-object (("nested" (make-object (("hello" ' +
+                            '"world"))))))'),
+            {nested: {hello: "world"}});
+        test.done();
     }
 };

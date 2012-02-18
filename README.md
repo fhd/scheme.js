@@ -107,6 +107,17 @@ JavaScript.
 _js_ refers to the global object, _window_ in the browser and
 _globals_ in Node.js.
 
+### Creating JavaScript objects
+
+You can create new JavaScript objects from an alist with the
+_make-object_, like this:
+
+    (make-object (("hello" "world") ("foo" "bar")))
+
+This will become:
+
+    {"hello: "world, "foo": "bar"}
+
 Compiling Scheme to JavaScript
 ------------------------------
 

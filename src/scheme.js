@@ -73,6 +73,13 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                 newEnv = new scheme.Environment(bindingMap, env);
             });
             return evalLetBody(newEnv, arguments);
+        },
+        "make-object": function(env, _, properties) {
+            var obj = {};
+            forEach(properties, function(property) {
+                obj[property[0].toString()] = eval(property[1], env);
+            });
+            return obj;
         }
     },
     JsProperty = function(object, property) {
@@ -325,6 +332,8 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         }
         if (isFunction(result))
             return "#procedure";
+        if (typeof result === "object")
+            return JSON.stringify(result);
         return result;
     }
 
