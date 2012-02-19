@@ -89,7 +89,7 @@ program
     })
     .parse(process.argv);
 
-scheme = require("../src/scheme.js"),
+scheme = require("../dist/scheme.js"),
 env = new scheme.Environment;
 
 if (program.args.length < 1)

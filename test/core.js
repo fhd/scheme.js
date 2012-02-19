@@ -32,8 +32,8 @@ module.exports = {
     testLambdas: function(test) {
 //        test.equal(utils.evalFirst("((lambda (x) (* x x)) 2)"), 4);
 //        test.equal(utils.eval("(define x 3) ((lambda (y) (* x y)) 2)")[1], 6);
-        test.equal(utils.eval(
-            "(define x 1) ((lambda () (define x 2))) x")[2], 1);
+//        test.equal(utils.eval(
+//            "(define x 1) ((lambda () (define x 2))) x")[2], 1);
         test.equal(utils.eval("(define x 1) ((lambda () (set! x 2))) x")[2], 2);
         test.done();
     },

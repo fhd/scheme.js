@@ -1,4 +1,4 @@
-var scheme = require("../src/scheme.js");
+var scheme = require("../dist/scheme.js");
 
 function printOne(result) {
     var s = scheme.print([result]);

@@ -1,4 +1,5 @@
 DIST_DIR=dist
+SOURCES=src/core.js src/utils.js src/procedures.js
 SCM=dist/scheme.js
 SCM_MIN=dist/scheme.min.js
 INSTALL_PREFIX=/usr/local
@@ -11,8 +12,8 @@ all: $(SCM) $(SCM_MIN)
 $(DIST_DIR):
 	mkdir $@
 
-$(SCM): src/scheme.js $(DIST_DIR)
-	cp $< $@
+$(SCM): $(SOURCES) $(DIST_DIR)
+	cat $(SOURCES) > $@
 
 $(SCM_MIN): $(SCM) $(DIST_DIR)
 	@if type uglifyjs >/dev/null; then \
