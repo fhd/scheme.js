@@ -27,9 +27,9 @@
                       (let ((text ($ "#text")))
                         ((.height ($ "#repl"))
                          (- ((.height ($ "body")))
-                            (+ ((.height text))
-                               (+ (.top ((.offset text)))
-                                  25)))))))
+                            ((.height text))
+                            (.top ((.offset text)))
+                            25)))))
                    (resize))))
         </script>
     </head>
