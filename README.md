@@ -105,7 +105,7 @@ JavaScript.
 ### Global variables
 
 _js_ refers to the global object, _window_ in the browser and
-_globals_ in Node.js.
+_global_ in Node.js.
 
 ### Creating JavaScript objects
 

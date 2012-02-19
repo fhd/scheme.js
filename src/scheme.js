@@ -127,6 +127,7 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         this.outer = outer || null;
         if (!(entries || outer)) {
             this.entries = {
+                "js": this,
                 "=": function(first, second) {
                     return first === second;
                 },
@@ -293,7 +294,7 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
             obj = (objName === "js") ? this :
                 eval(objExpr, env) || this.eval(objName);
         } else
-            obj = objExpr;
+            obj = eval(objExpr, env);
         args = evalAll(list.slice(2), env);
         return new JsProperty(obj, name);
     }
@@ -407,7 +408,7 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                         scheme.eval(scheme.read(data));
                     });
                 else
-                    scheme.eval(script.innerHTML);
+                    scheme.eval(scheme.read(script.innerHTML));
             });
         };
     }
