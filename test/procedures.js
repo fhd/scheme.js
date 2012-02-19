@@ -5,11 +5,26 @@ module.exports = {
         utils.resetEnv();
         callback();
     },
-    testArithmetic: function(test) {
-        test.equal(utils.evalFirst("(+ 1 3)"), 4);
-        test.equal(utils.evalFirst("(- 4 1)"), 3);
-        test.equal(utils.evalFirst("(* 2 9)"), 18);
+    testAddition: function(test) {
+        test.equal(utils.evalFirst("(+ 1 2)"), 3);
+        test.equal(utils.evalFirst("(+ 1 2 3)"), 6);
+        test.done();
+    },
+    testSubtraction: function(test) {
+        test.equal(utils.evalFirst("(- 2 1)"), 1);
+        test.equal(utils.evalFirst("(- 1)"), -1);
+        test.equal(utils.evalFirst("(- 3 2 1)"), 0);
+        test.done();
+    },
+    testMultiplication: function(test) {
+        test.equal(utils.evalFirst("(* 1 2)"), 2);
+        test.equal(utils.evalFirst("(* 1 2 3)"), 6);
+        test.done();
+    },
+    testDivision: function(test) {
         test.equal(utils.evalFirst("(/ 20 5)"), 4);
+        test.equal(utils.evalFirst("(/ 2)"), 0.5);
+        test.equal(utils.evalFirst("(/ 20 5 2)"), 2);
         test.done();
     },
     testComparison: function(test) {

@@ -142,6 +142,40 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                 "=": function(first, second) {
                     return first === second;
                 },
+                "+": function() {
+                    var sum = 0;
+                    forEach(arguments, function(n) {
+                        sum += n;
+                    });
+                    return sum;
+                },
+                "-": function() {
+                    var difference = arguments[0];
+                    if (arguments.length === 1)
+                        return -difference;
+                    forEach(Array.prototype.slice.call(arguments, 1),
+                            function(n) {
+                                difference -= n;
+                            });
+                    return difference;
+                },
+                "*": function() {
+                    var product = 1;
+                    forEach(arguments, function(n) {
+                        product *= n;
+                    });
+                    return product;
+                },
+                "/": function() {
+                    var quotient = arguments[0];
+                    if (arguments.length === 1)
+                        return 1/quotient;
+                    forEach(Array.prototype.slice.call(arguments, 1),
+                            function(n) {
+                                quotient /= n;
+                            });
+                    return quotient;
+                },
                 "string-append": function() {
                     var str = "";
                     forEach(arguments, function(s) {
@@ -179,7 +213,7 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                 }
             };
             that = this;
-            forEach(["+", "-", "*", "/", ">", "<", ">=", "<="],
+            forEach([">", "<", ">=", "<="],
                     function(operator) {
                         that.entries[operator] = function(first, second) {
                             return this.eval(first + operator + second);
