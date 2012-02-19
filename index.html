@@ -22,7 +22,6 @@
             (define $ (.$ js))
             ($ (lambda ()
                  (let ((resize (.resize ($ js))))
-                   ((.log console) w)
                    (resize
                     (lambda ()
                       (let ((text ($ "#text")))
