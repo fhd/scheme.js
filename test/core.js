@@ -94,5 +94,11 @@ module.exports = {
         test.throws(utils.evalFirst.bind(null, "'(. . .)"));
         test.throws(utils.evalFirst.bind(null, "'(1 . . .)"));
         test.done();
+    },
+    testQuasiquote: function(test) {
+        test.deepEqual(utils.evalFirst("(quasiquote (1 2 (unquote (+ 1 2))))"),
+                       [1, 2, 3]);
+        test.deepEqual(utils.evalFirst("`(1 2 ,(+ 1 2))"), [1, 2, 3]);
+        test.done();
     }
 };

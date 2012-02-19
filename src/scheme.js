@@ -41,6 +41,21 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         "quote": function(env, _, value) {
             return value;
         },
+        "quasiquote": function(env, _, value) {
+            function quasiEval(sexp, env) {
+                var first;
+                if (!isArray(sexp) || !sexp.length)
+                    return sexp;
+                first = sexp[0];
+                if (first instanceof scheme.Symbol
+                    && first.toString() === "unquote")
+                    return eval(sexp[1], env);
+                return map(sexp, function(e) {
+                    return quasiEval(e, env);
+                });
+            }
+            return quasiEval(value, env);
+        },
         "begin": function(env) {
             var result;
             forEach(Array.prototype.slice.call(arguments, 2), function(arg) {
@@ -244,9 +259,13 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
             throw "Unexpected EOF while reading";
         token = tokens[0];
         tokens.shift();
-        if (token === "'") {
+        if (token === "'")
             return [new scheme.Symbol("quote"), readTokens(tokens)];
-        } else if (token === "(") {
+        if (token === "`")
+            return [new scheme.Symbol("quasiquote"), readTokens(tokens)];
+        if (token === ",")
+            return [new scheme.Symbol("unquote"), readTokens(tokens)];
+        if (token === "(") {
             list = [];
             while (tokens[0] !== ")")
                 list.push(readTokens(tokens));
@@ -260,7 +279,8 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                     break;
                 }
             return list;
-        } else if (token === ")")
+        }
+        if (token === ")")
             throw "Unexpected )";
         else
             return readAtom(token);
