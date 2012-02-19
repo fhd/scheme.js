@@ -44,6 +44,9 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         "quasiquote": function(env, _, value) {
             function quasiEval(sexp, env) {
                 var first;
+                if (sexp instanceof Pair)
+                    return new Pair(quasiEval(sexp.car ,env),
+                                    quasiEval(sexp.cdr, env));
                 if (!isArray(sexp) || !sexp.length)
                     return sexp;
                 first = sexp[0];
@@ -85,13 +88,6 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                 newEnv = new scheme.Environment(bindingMap, env);
             });
             return evalLetBody(newEnv, arguments);
-        },
-        "make-object": function(env, _, properties) {
-            var obj = {};
-            forEach(properties, function(property) {
-                obj[property[0].toString()] = eval(property[1], env);
-            });
-            return obj;
         },
         "try": function(env, _, expression, catchCallback) {
             try {
@@ -173,6 +169,13 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
                     result = this.eval(s);
                     delete this.schemeTemp;
                     return result;
+                },
+                "make-object": function(properties) {
+                    var obj = {};
+                    forEach(properties, function(property) {
+                        obj[property.car] = property.cdr;
+                    });
+                    return obj;
                 }
             };
             that = this;
@@ -253,37 +256,41 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
         return new Pair(car, cdr);
     }
     
-    function readTokens(tokens) {
-        var token, isPair, i, list;
+    function readTokens(tokens, quasiQuoted) {
+        var token, list, i;
         if (tokens.length === 0)
             throw "Unexpected EOF while reading";
         token = tokens[0];
         tokens.shift();
         if (token === "'")
-            return [new scheme.Symbol("quote"), readTokens(tokens)];
+            return [new scheme.Symbol("quote"),
+                    readTokens(tokens, quasiQuoted)];
         if (token === "`")
-            return [new scheme.Symbol("quasiquote"), readTokens(tokens)];
+            return [new scheme.Symbol("quasiquote"), readTokens(tokens, true)];
         if (token === ",")
-            return [new scheme.Symbol("unquote"), readTokens(tokens)];
+            return [new scheme.Symbol("unquote"),
+                    readTokens(tokens, quasiQuoted)];
         if (token === "(") {
             list = [];
             while (tokens[0] !== ")")
-                list.push(readTokens(tokens));
+                list.push(readTokens(tokens, quasiQuoted));
             tokens.shift();
             for (i = 0; i < list.length; i++)
                 if (list[i].toString() === ".") {
                     if (i === 0 || i !== list.length - 2)
                         throw "Invalid dotted list";
-                    if (list.length === 3)
+                    if (list.length === 3) {
+                        if (quasiQuoted)
+                            return new Pair(list[0], list[2]);
                         return cons(list[0], list[2]);
+                    }
                     break;
                 }
             return list;
         }
         if (token === ")")
             throw "Unexpected )";
-        else
-            return readAtom(token);
+        return readAtom(token);
     }
 
     scheme.read = function(string) {
@@ -335,7 +342,7 @@ var scheme = (typeof exports !== "undefined") ? exports : {};
     }
 
     function eval(sexp, env) {
-        var name, first, firstChar, readMacro;
+        var name, first, readMacro;
         if (sexp instanceof scheme.Symbol) {
             name = sexp.toString();
             return (name[0] === "'") ? new scheme.Symbol(name.substring(1)) :
