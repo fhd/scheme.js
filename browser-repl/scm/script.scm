@@ -7,7 +7,7 @@
         (make-object
          ((promptLabel "=> ")
           (commandHandle (lambda (line)
-                           (if (.length line)
+                           (if (and line (.length line))
                                (try
                                 ((.print scheme)
                                  ((.eval scheme) ((.read scheme) line) env))
