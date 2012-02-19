@@ -1,8 +1,9 @@
 The goal is R5RS compliance, and support for the most popular SRFIs.
 This is a list of the things that are on the agenda right now.
 
+* Make + accept >2 arguments
+* Use an alist for make-object
 * Add a simple Scheme tutorial to the REPLs
-* Use scheme.js for the GitHub page
 * Implement tail recursion optimization (R5RS 3.5)
 * Add scheme.js to npm
 * Support macros
