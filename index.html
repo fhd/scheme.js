@@ -17,14 +17,21 @@
             }
         </style>
         <script src="browser-repl/js/libs/jquery-1.7.1.min.js"></script>
-        <script>
-            $(function() {
-                $(window).resize(function() {
-                    var text = $("#text");
-                    $("#repl").height($("body").height() - text.height() -
-                                      text.offset().top - 25);
-                }).resize();
-            });
+        <script src="browser-repl/js/scheme.min.js"></script>
+        <script type="text/x-scheme">
+            (define $ (.$ js))
+            ($ (lambda ()
+                 (let ((resize (.resize ($ js))))
+                   ((.log console) w)
+                   (resize
+                    (lambda ()
+                      (let ((text ($ "#text")))
+                        ((.height ($ "#repl"))
+                         (- ((.height ($ "body")))
+                            (+ ((.height text))
+                               (+ (.top ((.offset text)))
+                                  25)))))))
+                   (resize))))
         </script>
     </head>
     <body>
