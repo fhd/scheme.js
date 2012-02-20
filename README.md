@@ -8,7 +8,13 @@ This is still work in progress, the goal is (near)
 [R5RS](http://schemers.org/Documents/Standards/R5RS/) compliance.
 Have a look at the
 [TODO](https://github.com/fhd/scheme.js/blob/master/TODO.md) to see
-what's on the agenda.
+what's on the agenda. Feedback and contributions welcome, just
+drop me a line (or a pull request).
+
+If you'd like to see some practical examples, have a look at the
+[GitHub page](https://github.com/fhd/scheme.js/blob/gh-pages/index.html)
+and the
+[browser REPL](https://github.com/fhd/scheme.js/tree/master/browser-repl).
 
 Running the REPL
 ----------------
@@ -62,14 +68,14 @@ this:
 Using scheme.js in Node.js
 --------------------------
 
-You execute a scheme file via the REPL:
+You can execute a scheme file via the REPL:
 
     bin/schemejs hello.scm
 
 Or evaluate Scheme from JavaScript:
 
     var scheme = require("./scheme.min.js");
-    scheme.eval('((.log console) "Hello, World!")', new scheme.Environment);
+    scheme.eval(scheme.read('((.log console) "Hello, World!")'), new scheme.Environment);
 
 JavaScript interoperabillity
 ----------------------------
@@ -112,7 +118,7 @@ _global_ in Node.js.
 You can create new JavaScript objects from an alist with the
 _make-object_, like this:
 
-    (make-object (("hello" "world") ("foo" "bar")))
+    (make-object '(("hello" "world") ("foo" "bar")))
 
 This will become:
 
@@ -165,7 +171,7 @@ compiled source files they will automatically use the same
 environment.
 
 This isn't compilation in the proper sense: The result is just the
-parsed Scheme code in JavaScript data structures, wrapped in a _eval_
+parsed Scheme code in JavaScript data structures, wrapped in an _eval_
 call. It is still interpreted at runtime.
 
 Running the tests
