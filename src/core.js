@@ -321,6 +321,10 @@ var scheme = (function(scheme) {
         });
     }
 
+    scheme.load = function(string, env) {
+        return scheme.eval(scheme.read(string), env);
+    }
+
     scheme.print = function(results) {
         var s = "";
         scheme.utils.forEach(results, function(result) {
@@ -337,10 +341,10 @@ var scheme = (function(scheme) {
                     return;
                 if (script.src.length)
                     scheme.utils.httpGet(script.src, function(data) {
-                        scheme.eval(scheme.read(data));
+                        scheme.load(data);
                     });
                 else
-                    scheme.eval(scheme.read(script.innerHTML));
+                    scheme.load(script.innerHTML);
             });
         };
     }

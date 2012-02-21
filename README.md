@@ -65,6 +65,10 @@ this:
     </script>
     <script type="text/x-scheme" src="hello.scm"></script>
 
+You can also evaluate Scheme from JavaScript:
+
+    scheme.load('((.log console) "Hello, World!")', new scheme.Environment);
+
 Using scheme.js in Node.js
 --------------------------
 
@@ -75,7 +79,7 @@ You can execute a scheme file via the REPL:
 Or evaluate Scheme from JavaScript:
 
     var scheme = require("./scheme.min.js");
-    scheme.eval(scheme.read('((.log console) "Hello, World!")'), new scheme.Environment);
+    scheme.load('((.log console) "Hello, World!")', new scheme.Environment);
 
 JavaScript interoperabillity
 ----------------------------

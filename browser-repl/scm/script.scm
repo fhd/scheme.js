@@ -10,7 +10,7 @@
                                (if (and line (.length line))
                                    (try
                                     ((.print scheme)
-                                     ((.eval scheme) ((.read scheme) line) env))
+                                     ((.load scheme) line env))
                                     (lambda (e) (string-append "Error: " e)))
                                    "")))
            (autofocus . #t)
