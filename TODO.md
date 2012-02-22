@@ -3,8 +3,7 @@ The goal is R5RS compliance, and support for the most popular SRFIs.
 This is a list of the things that are on the agenda right now, ordered
 by importance.
 
-* Add a loadFile (slurp, read, eval) function
-* Make read, eval, print, load and loadFile available as procedures
+* Make (load) load files.
 * Implement tail recursion optimization (R5RS 3.5)
 * Support macros
 * Support character literals

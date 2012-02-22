@@ -98,7 +98,7 @@ var scheme = (function(scheme) {
                 return f(e);
             }
         }
-    },
+     },
     JsProperty = function(object, property) {
         this.object = object;
         this.property = property;

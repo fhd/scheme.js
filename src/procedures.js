@@ -89,6 +89,21 @@ scheme.standardProcedures = (function(scheme) {
                 obj[property.car] = property.cdr;
             });
             return obj;
+        },
+        "read": function(string) {
+            // TODO: This should use a port, not a string
+            return scheme.read(string);
+        },
+        "eval": function(expression, environment) {
+            return scheme.eval([expression], environment)[0];
+        },
+        "print": function(expression) {
+            var output = scheme.print([expression]);
+            return output.substring(0, output.length - 1);
+        },
+        "load": function(string, environment) {
+            // TODO: Should load a file, not a string
+            return scheme.load(string, environment);
         }
     };
 })(scheme);

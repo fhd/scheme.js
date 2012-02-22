@@ -61,5 +61,21 @@ module.exports = {
         test.equal(utils.evalFirst(
             '(apply string-append \'("Hello" ", " "World"))'), "Hello, World");
         test.done();
+    },
+    testRead: function(test) {
+        test.deepEqual(utils.evalFirst('(read "(+ 1 2)")'), [[{s: "+"}, 1, 2]]);
+        test.done();
+    },
+    testEval: function(test) {
+        test.equal(utils.evalFirst("(eval '(+ 1 2))"), 3);
+        test.done();
+    },
+    testPrint: function(test) {
+        test.equal(utils.evalFirst("(print '(1 2 3))"), "(1 2 3)");
+        test.done();
+    },
+    testLoad: function(test) {
+        test.equal(utils.evalFirst('(load "(+ 1 2)")'), 3);
+        test.done();
     }
 }
