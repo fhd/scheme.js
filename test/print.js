@@ -1,13 +1,12 @@
 var scheme = require("../dist/scheme.js");
 
 function printOne(result) {
-    var s = scheme.print([result]);
-    return s.substring(0, s.indexOf("\n"));
+    return scheme.print([result]);
 }
 
 module.exports = {
     testMultiple: function(test) {
-        test.equal(scheme.print([1, 2]), "1\n2\n");
+        test.equal(scheme.print([1, 2]), "1\n2");
         test.done();
     },
     testStrings: function(test) {

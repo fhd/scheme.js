@@ -97,9 +97,8 @@ scheme.standardProcedures = (function(scheme) {
         "eval": function(expression, environment) {
             return scheme.eval([expression], environment)[0];
         },
-        "print": function(expression) {
-            var output = scheme.print([expression]);
-            return output.substring(0, output.length - 1);
+        "print": function(expressions) {
+            return scheme.print(expressions);
         },
         "eval-string": function(string, environment) {
             return scheme.evalString(string, environment);

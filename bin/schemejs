@@ -31,7 +31,7 @@ function rep(string, opts) {
         }
         results = scheme.eval(expressions, env);
         if (opts.print)
-            process.stdout.write(scheme.print(results));
+            console.log(scheme.print(results));
     } catch (e) {
         console.error("Error: " + e);
     }

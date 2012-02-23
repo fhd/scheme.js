@@ -326,10 +326,12 @@ var scheme = (function(scheme) {
     }
 
     scheme.print = function(results) {
-        var s = "";
-        scheme.utils.forEach(results, function(result) {
-            s += format(result) + "\n";
-        });
+        var s = "", i;
+        for (i = 0; i < results.length; i++) {
+            if (i > 0)
+                s += "\n";
+            s += format(results[i]);
+        }
         return s;
     }
 

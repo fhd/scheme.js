@@ -71,7 +71,7 @@ module.exports = {
         test.done();
     },
     testPrint: function(test) {
-        test.equal(utils.evalFirst("(print '(1 2 3))"), "(1 2 3)");
+        test.equal(utils.evalFirst("(print '((1 2)))"), "(1 2)");
         test.done();
     },
     testEvalString: function(test) {
