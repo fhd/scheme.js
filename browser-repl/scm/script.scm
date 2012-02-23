@@ -1,16 +1,14 @@
 (define $ (.$ js))
 
 ($ (lambda ()
-     (let ((env (new (.Environment scheme)))
-           (shell ($ "#shell")))
+     (let ((shell ($ "#shell")))
        ((.console shell)
         (make-object
          `((promptLabel . "=> ")
            (commandHandle . ,(lambda (line)
                                (if (and line (.length line))
                                    (try
-                                    ((.print scheme)
-                                     ((.load scheme) line env))
+                                    (print (eval-string line))
                                     (lambda (e) (string-append "Error: " e)))
                                    "")))
            (autofocus . #t)
