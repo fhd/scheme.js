@@ -101,9 +101,8 @@ scheme.standardProcedures = (function(scheme) {
             var output = scheme.print([expression]);
             return output.substring(0, output.length - 1);
         },
-        "load": function(string, environment) {
-            // TODO: Should load a file, not a string
-            return scheme.load(string, environment);
+        "eval-string": function(string, environment) {
+            return scheme.evalString(string, environment);
         }
     };
 })(scheme);

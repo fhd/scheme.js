@@ -321,7 +321,7 @@ var scheme = (function(scheme) {
         });
     }
 
-    scheme.load = function(string, env) {
+    scheme.evalString = function(string, env) {
         return scheme.eval(scheme.read(string), env);
     }
 
@@ -341,10 +341,10 @@ var scheme = (function(scheme) {
                     return;
                 if (script.src.length)
                     scheme.utils.httpGet(script.src, function(data) {
-                        scheme.load(data);
+                        scheme.evalString(data);
                     });
                 else
-                    scheme.load(script.innerHTML);
+                    scheme.evalString(script.innerHTML);
             });
         };
     }

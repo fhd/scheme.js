@@ -74,8 +74,8 @@ module.exports = {
         test.equal(utils.evalFirst("(print '(1 2 3))"), "(1 2 3)");
         test.done();
     },
-    testLoad: function(test) {
-        test.equal(utils.evalFirst('(load "(+ 1 2)")'), 3);
+    testEvalString: function(test) {
+        test.equal(utils.evalFirst('(eval-string "(+ 1 2)")'), 3);
         test.done();
     }
 }
