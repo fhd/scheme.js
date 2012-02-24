@@ -3,7 +3,6 @@ The goal is R5RS compliance, and support for the most popular SRFIs.
 This is a list of the things that are on the agenda right now, ordered
 by importance.
 
-* Add (load) to load files.
 * Use Scheme for the cmd REPL.
 * Use (necessarily initialise) the global environment as fall back.
 * Implement tail recursion optimization (R5RS 3.5)

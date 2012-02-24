@@ -336,18 +336,32 @@ var scheme = (function(scheme) {
     }
 
     if (typeof window !== "undefined") {
+        scheme.load = function(file, environment) {
+            var result;
+            scheme.utils.httpGet(file, function(data) {
+                result = scheme.evalString(data, environment);
+            }, false);
+            return result;
+        };
+
         window.onload = function() {
             var scripts = document.getElementsByTagName("script");
             scheme.utils.forEach(scripts, function(script) {
                 if (script.type !== "text/x-scheme")
                     return;
                 if (script.src.length)
-                    scheme.utils.httpGet(script.src, function(data) {
-                        scheme.evalString(data);
-                    });
+                    scheme.load(script.src);
                 else
                     scheme.evalString(script.innerHTML);
             });
+        };
+    } else {
+        scheme.load = function(file, environment) {
+            var result;
+            var fs = require("fs"),
+                data = fs.readFileSync(file, "utf-8");
+            result = scheme.evalString(data, environment);
+            return result;
         };
     }
 

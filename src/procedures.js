@@ -102,6 +102,9 @@ scheme.standardProcedures = (function(scheme) {
         },
         "eval-string": function(string, environment) {
             return scheme.evalString(string, environment);
+        },
+        "load": function(file, environment) {
+            return scheme.load(file, environment);
         }
     };
 })(scheme);

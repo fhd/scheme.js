@@ -17,7 +17,7 @@ scheme.utils = (function(scheme) {
         isFunction: function(f) {
             return f && {}.toString.call(f) === "[object Function]";
         },
-        httpGet: function(uri, callback) {
+        httpGet: function(uri, callback, async) {
             var httpRequest;
             if (window.XMLHttpRequest)
                 httpRequest = new XMLHttpRequest;
@@ -33,7 +33,7 @@ scheme.utils = (function(scheme) {
                     throw "Unable to load scheme script from: " + uri +
                         ", status: " + statusText;
             };
-            httpRequest.open("GET", uri);
+            httpRequest.open("GET", uri, async);
             httpRequest.send();
         }
     };

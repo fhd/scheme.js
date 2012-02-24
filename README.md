@@ -69,6 +69,10 @@ You can also evaluate Scheme from JavaScript:
 
     scheme.evalString('((.log console) "Hello, World!")', new scheme.Environment);
 
+Or load a file:
+
+    scheme.load("/hello.scm");
+
 Using scheme.js in Node.js
 --------------------------
 
@@ -80,6 +84,11 @@ Or evaluate Scheme from JavaScript:
 
     var scheme = require("./scheme.min.js");
     scheme.evalString('((.log console) "Hello, World!")', new scheme.Environment);
+
+Or load a file from JavaScript:
+
+    var scheme = require("./scheme.min.js");
+    scheme.load("hello.scm");
 
 JavaScript interoperabillity
 ----------------------------
