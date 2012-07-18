@@ -67,19 +67,18 @@ scheme.standardProcedures = (function(scheme) {
             return scheme.callProcedure([procedure].concat(args));
         },
         "new": function() {
-            var s, i, result;
             this.schemeTemp = {
                 constructor: arguments[0].get(),
                 args: Array.prototype.slice.call(arguments, 1)
             };
-            s = "new this.schemeTemp.constructor(";
-            for (i = 0; i < this.schemeTemp.args.length; i++) {
+            var s = "new this.schemeTemp.constructor(";
+            for (var i = 0; i < this.schemeTemp.args.length; i++) {
                 if (i > 0)
                     s += ",";
                 s += "this.schemeTemp.args[" + i + "]";
             }
             s += ");";
-            result = this.eval(s);
+            var result = this.eval(s);
             delete this.schemeTemp;
             return result;
         },

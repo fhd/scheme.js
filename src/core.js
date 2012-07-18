@@ -4,21 +4,19 @@ var scheme = (function(scheme) {
             return eval(eval(test, env) ? consequence : alternative, env);
         },
         "define": function(env, _, first, second) {
-            var name, args, body;
             if (!scheme.utils.isArray(first)) {
                 env.define(first, eval(second, env));
                 return;
             }
-            name = first[0];
-            args = first.slice(1);
-            body = [new scheme.Symbol("begin")]
-                .concat(Array.prototype.slice.call(arguments, 3));
+            var name = first[0],
+                args = first.slice(1),
+                body = [new scheme.Symbol("begin")]
+                    .concat(Array.prototype.slice.call(arguments, 3));
             env.define(name, readMacros["lambda"](env, _, args, body));
         },
         "set!": function(env, _, variable, value) {
-            var name;
             if (variable instanceof scheme.Symbol) {
-                name = variable.toString();
+                var name = variable.toString();
                 if (typeof env.get(name) === "undefined")
                     throw "Unbound variable: " + name;
                 env.set(name, value);
@@ -29,9 +27,9 @@ var scheme = (function(scheme) {
         },
         "lambda": function(env, _, lambdaArgs, body) {
             return function() {
-                var argMap = {}, i;
-                for (i = 0; i < Math.min(lambdaArgs.length, arguments.length);
-                     i++)
+                var numArgs = Math.min(lambdaArgs.length, arguments.length),
+                    argMap = {};
+                for (var i = 0; i < numArgs; i++)
                     argMap[lambdaArgs[i]] = eval(arguments[i], env);
                 return eval(body, new scheme.Environment(argMap, env));
             };
@@ -41,13 +39,12 @@ var scheme = (function(scheme) {
         },
         "quasiquote": function(env, _, value) {
             function quasiEval(sexp, env) {
-                var first;
                 if (sexp instanceof scheme.Pair)
                     return new scheme.Pair(quasiEval(sexp.car ,env),
                                            quasiEval(sexp.cdr, env));
                 if (!scheme.utils.isArray(sexp) || !sexp.length)
                     return sexp;
-                first = sexp[0];
+                var first = sexp[0];
                 if (first instanceof scheme.Symbol
                     && first.toString() === "unquote")
                     return eval(sexp[1], env);
@@ -98,7 +95,7 @@ var scheme = (function(scheme) {
                 return f(e);
             }
         }
-     },
+    },
     JsProperty = function(object, property) {
         this.object = object;
         this.property = property;
@@ -115,15 +112,14 @@ var scheme = (function(scheme) {
     function readAtom(token) {
         var first = token[0],
             lastIndex = token.length - 1,
-            last = token[lastIndex],
-            rest, number;
+            last = token[lastIndex];
         if (first === '"' || last === '"') {
             if (first !== last)
                 throw "Unexpected EOF while reading string";
             return token.substring(1, lastIndex);
         }
         if (first === "#") {
-            rest = token.substring(1);
+            var rest = token.substring(1);
             if (rest === "t")
                 return true;
             else if (rest === "f")
@@ -131,17 +127,16 @@ var scheme = (function(scheme) {
             else
                 throw "Not a valid boolean literal: " + rest;
         }
-        number = parseFloat(token);
+        var number = parseFloat(token);
         if (!isNaN(number))
             return number;
         return new scheme.Symbol(token);
     }
 
     function readTokens(tokens, quasiQuoted) {
-        var token, list, i;
         if (tokens.length === 0)
             throw "Unexpected EOF while reading";
-        token = tokens[0];
+        var token = tokens[0];
         tokens.shift();
         if (token === "'")
             return [new scheme.Symbol("quote"),
@@ -152,11 +147,11 @@ var scheme = (function(scheme) {
             return [new scheme.Symbol("unquote"),
                     readTokens(tokens, quasiQuoted)];
         if (token === "(") {
-            list = [];
+            var list = [];
             while (tokens[0] !== ")")
                 list.push(readTokens(tokens, quasiQuoted));
             tokens.shift();
-            for (i = 0; i < list.length; i++)
+            for (var i = 0; i < list.length; i++)
                 if (list[i].toString() === ".") {
                     if (i === 0 || i !== list.length - 2)
                         throw "Invalid dotted list";
@@ -176,31 +171,29 @@ var scheme = (function(scheme) {
 
     function getJsProperty(list, env) {
         var name = list[0].toString().substring(1),
-            objExpr = list[1],
-            objName, obj, args;
+            objExpr = list[1];
         if (objExpr instanceof scheme.Symbol) {
-            objName = objExpr.toString();
-            obj = (objName === "js") ? this :
-                eval(objExpr, env) || this.eval(objName);
+            var objName = objExpr.toString(),
+                obj = (objName === "js") ? this :
+                    eval(objExpr, env) || this.eval(objName);
         } else
             obj = eval(objExpr, env);
-        args = evalAll(list.slice(2), env);
+        var args = evalAll(list.slice(2), env);
         return new JsProperty(obj, name);
     }
 
     function eval(sexp, env) {
-        var name, first, readMacro;
         if (sexp instanceof scheme.Symbol) {
-            name = sexp.toString();
+            var name = sexp.toString();
             return (name[0] === "'") ? new scheme.Symbol(name.substring(1)) :
                 env.get(name);
         }
         if (!scheme.utils.isArray(sexp))
             return sexp;
-        first = sexp[0];
+        var first = sexp[0];
         if (first instanceof scheme.Symbol && first.toString()[0] === ".")
             return getJsProperty(sexp, env);
-        readMacro = readMacros[first];
+        var readMacro = readMacros[first];
         if (readMacro)
             return readMacro.apply(null, [env].concat(sexp));
         return scheme.callProcedure(sexp, env);
@@ -218,7 +211,6 @@ var scheme = (function(scheme) {
     }
 
     function format(result) {
-        var s;
         if (typeof result === "string")
             return '"' + result + '"';
         if (typeof result === "boolean")
@@ -226,7 +218,7 @@ var scheme = (function(scheme) {
         if (result instanceof scheme.Symbol)
             return result.toString();
         if (scheme.utils.isArray(result)) {
-            s = "(";
+            var s = "(";
             scheme.utils.forEach(result, function(element) {
                 if (s.length > 1)
                     s += " ";
@@ -326,8 +318,8 @@ var scheme = (function(scheme) {
     }
 
     scheme.print = function(results) {
-        var s = "", i;
-        for (i = 0; i < results.length; i++) {
+        var s = "";
+        for (var i = 0; i < results.length; i++) {
             if (i > 0)
                 s += "\n";
             s += format(results[i]);
@@ -357,11 +349,9 @@ var scheme = (function(scheme) {
         };
     } else {
         scheme.load = function(file, environment) {
-            var result;
             var fs = require("fs"),
-                data = fs.readFileSync(file, "utf-8");
-            result = scheme.evalString(data, environment);
-            return result;
+                data = fs.readFileSync(file, "utf-8")
+            return scheme.evalString(data, environment);
         };
     }
 

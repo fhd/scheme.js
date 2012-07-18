@@ -1,13 +1,12 @@
 scheme.utils = (function(scheme) {
     return {
         forEach: function(array, f) {
-            var i;
-            for (i = 0; i < array.length; i++)
+            for (var i = 0; i < array.length; i++)
                 f(array[i]);
         },
         map: function(array, f) {
-            var newArray = [], i;
-            for (i = 0; i < array.length; i++)
+            var newArray = [];
+            for (var i = 0; i < array.length; i++)
                 newArray.push(f(array[i]));
             return newArray;
         },
